@@ -21,7 +21,6 @@ body{
   position:relative;overflow:hidden;
   box-shadow:0 0 40px rgba(0,0,0,.1);
 }
-/* Pages */
 .page{display:none;padding-bottom:70px;min-height:100vh;opacity:0;transition:opacity .35s ease;}
 .page.active{display:block;opacity:1;}
 
@@ -157,6 +156,28 @@ body{
 .course-card.completed .course-status{background:#e8f5e9;color:#2e7d32;}
 .course-card.current .course-status{background:#fff8e1;color:#f57f17;}
 .course-card.locked .course-status{background:var(--soft);color:var(--gray);}
+.course-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.btn-exam-inline{
+  font-size:10px;padding:3px 10px;border-radius:8px;
+  border:1.5px solid var(--gold);color:var(--gold);background:transparent;
+  cursor:pointer;font-weight:600;letter-spacing:1px;
+  transition:var(--transition);white-space:nowrap;
+}
+.btn-exam-inline:active{background:var(--gold);color:#fff;transform:scale(.95);}
+.course-card.completed .btn-exam-inline{border-color:var(--moss);color:var(--moss);}
+.course-card.completed .btn-exam-inline:active{background:var(--moss);color:#fff;}
+
+/* Exam badge on course card */
+.course-badge{
+  position:absolute;top:8px;right:8px;
+  font-size:10px;padding:2px 8px;border-radius:10px;
+  font-weight:600;letter-spacing:1px;
+}
+.course-badge.rank-mengxue{background:#e0e0e0;color:#616161;}
+.course-badge.rank-xiuye{background:#e3f2fd;color:#1565c0;}
+.course-badge.rank-mingbian{background:#e8f5e9;color:#2e7d32;}
+.course-badge.rank-zhizhi{background:#f3e5f5;color:#7b1fa2;}
+.course-badge.rank-dengfeng{background:linear-gradient(135deg,#fff8e1,#ffe082);color:#bf8c00;box-shadow:0 1px 4px rgba(191,140,0,.3);}
 
 /* Course Detail Modal */
 .modal-overlay{
@@ -212,6 +233,112 @@ body{
   text-align:center;font-size:16px;color:var(--moss);
   font-style:italic;padding:16px;
   border:1px dashed var(--gold);border-radius:var(--radius);
+}
+
+/* Exam Button in Course Detail */
+.btn-exam{
+  display:block;width:calc(100% - 40px);margin:0 20px 20px;
+  background:linear-gradient(135deg,#7b1fa2,#9c27b0);color:#fff;
+  border:none;padding:16px;border-radius:var(--radius);font-size:15px;
+  font-weight:600;letter-spacing:3px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(123,31,162,.3);transition:var(--transition);
+  text-align:center;
+}
+.btn-exam:active{transform:scale(.97);}
+
+/* ===== EXAM MODAL (Full Screen) ===== */
+.exam-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:var(--light);z-index:300;
+  display:none;flex-direction:column;
+  max-width:430px;margin:0 auto;
+}
+.exam-overlay.show{display:flex;}
+.exam-header{
+  padding:16px 20px;background:linear-gradient(135deg,var(--ink),var(--moss));
+  color:#fff;display:flex;align-items:center;justify-content:space-between;
+}
+.exam-header-title{font-size:16px;font-weight:600;letter-spacing:2px;}
+.exam-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:4px 8px;}
+.exam-progress{
+  padding:12px 20px;background:#fff;border-bottom:1px solid var(--soft);
+}
+.exam-progress-bar{height:4px;background:var(--soft);border-radius:2px;overflow:hidden;}
+.exam-progress-fill{height:100%;background:linear-gradient(90deg,#7b1fa2,var(--gold));border-radius:2px;transition:width .3s;}
+.exam-progress-text{font-size:12px;color:var(--gray);margin-top:6px;display:flex;justify-content:space-between;}
+.exam-body{
+  flex:1;overflow-y:auto;padding:20px;
+}
+.exam-question-num{
+  display:inline-block;background:linear-gradient(135deg,#7b1fa2,#9c27b0);
+  color:#fff;font-size:12px;padding:3px 12px;border-radius:12px;
+  margin-bottom:12px;font-weight:600;
+}
+.exam-question-text{
+  font-size:16px;line-height:1.8;color:var(--ink);margin-bottom:20px;font-weight:500;
+}
+.exam-options{display:flex;flex-direction:column;gap:10px;}
+.exam-option{
+  display:flex;align-items:flex-start;gap:12px;
+  background:#fff;border:2px solid var(--soft);border-radius:var(--radius);
+  padding:14px 16px;cursor:pointer;transition:var(--transition);
+  font-size:14px;line-height:1.6;
+}
+.exam-option:active{transform:scale(.98);}
+.exam-option.selected{border-color:#7b1fa2;background:#f3e5f5;}
+.exam-option.correct{border-color:#2e7d32;background:#e8f5e9;}
+.exam-option.wrong{border-color:var(--red);background:#fbe9e7;}
+.exam-option-label{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--soft);display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;color:var(--gray);
+  transition:var(--transition);
+}
+.exam-option.selected .exam-option-label{background:#7b1fa2;color:#fff;}
+.exam-option.correct .exam-option-label{background:#2e7d32;color:#fff;}
+.exam-option.wrong .exam-option-label{background:var(--red);color:#fff;}
+.exam-option-text{flex:1;}
+.exam-footer{
+  padding:16px 20px;background:#fff;border-top:1px solid var(--soft);
+  display:flex;gap:12px;
+}
+.btn-exam-prev, .btn-exam-next, .btn-exam-submit{
+  flex:1;padding:14px;border:none;border-radius:var(--radius);
+  font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);
+  letter-spacing:1px;
+}
+.btn-exam-prev{background:var(--soft);color:var(--ink);}
+.btn-exam-next{background:var(--moss);color:#fff;}
+.btn-exam-submit{background:linear-gradient(135deg,#7b1fa2,#9c27b0);color:#fff;}
+.btn-exam-prev:disabled,.btn-exam-next:disabled{opacity:.4;cursor:not-allowed;}
+
+/* Exam Result */
+.exam-result{
+  text-align:center;padding:40px 20px;
+}
+.exam-result-score{
+  font-size:72px;font-weight:700;color:var(--moss);margin:16px 0;
+}
+.exam-result-rank{
+  display:inline-block;font-size:18px;font-weight:600;
+  padding:8px 24px;border-radius:20px;margin:12px 0 24px;
+  letter-spacing:3px;
+}
+.exam-result-rank.rank-mengxue{background:#e0e0e0;color:#616161;}
+.exam-result-rank.rank-xiuye{background:#e3f2fd;color:#1565c0;}
+.exam-result-rank.rank-mingbian{background:#e8f5e9;color:#2e7d32;}
+.exam-result-rank.rank-zhizhi{background:#f3e5f5;color:#7b1fa2;}
+.exam-result-rank.rank-dengfeng{background:linear-gradient(135deg,#fff8e1,#ffe082);color:#bf8c00;}
+.exam-result-msg{font-size:14px;color:var(--gray);line-height:1.8;margin-bottom:24px;}
+.btn-exam-retry{
+  background:var(--moss);color:#fff;border:none;
+  padding:14px 36px;border-radius:30px;font-size:15px;
+  cursor:pointer;transition:var(--transition);margin:8px;
+}
+.btn-exam-back{
+  background:var(--soft);color:var(--ink);border:none;
+  padding:14px 36px;border-radius:30px;font-size:15px;
+  cursor:pointer;transition:var(--transition);margin:8px;
 }
 
 /* ===== CHECK-IN PAGE ===== */
@@ -278,14 +405,29 @@ body{
 .profile-header{
   background:linear-gradient(160deg,var(--ink),var(--moss));
   padding:40px 20px 30px;text-align:center;color:#fff;
+  cursor:pointer;
 }
 .avatar{
   width:72px;height:72px;border-radius:50%;
   background:var(--gold);display:flex;align-items:center;justify-content:center;
   font-size:28px;margin:0 auto 12px;border:3px solid rgba(255,255,255,.3);
 }
+.avatar.default-avatar{
+  background:#8a9a92;
+}
+.avatar.default-avatar::before{
+  content:'';display:block;width:28px;height:28px;
+  border-radius:50%;background:rgba(255,255,255,.5);
+  position:relative;top:-2px;
+}
+.avatar.default-avatar::after{
+  content:'';display:block;width:44px;height:22px;
+  border-radius:22px 22px 0 0;background:rgba(255,255,255,.5);
+  position:relative;top:2px;
+}
 .profile-name{font-size:18px;font-weight:600;}
 .profile-level{font-size:12px;color:var(--gold);margin-top:4px;}
+.profile-login-hint{font-size:12px;color:rgba(255,255,255,.6);margin-top:4px;}
 
 .profile-stats{
   display:flex;margin:0 20px;background:#fff;border-radius:var(--radius);
@@ -308,6 +450,48 @@ body{
 .badge-name{font-size:11px;color:var(--ink);font-weight:600;}
 .badge-desc{font-size:10px;color:var(--gray);margin-top:2px;}
 
+/* Logout button */
+.btn-logout{
+  display:block;margin:20px auto;padding:12px 40px;
+  background:none;border:1px solid var(--red);color:var(--red);
+  border-radius:30px;font-size:13px;cursor:pointer;transition:var(--transition);
+}
+.btn-logout:active{background:var(--red);color:#fff;}
+
+/* ===== LOGIN MODAL ===== */
+.login-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.5);z-index:250;
+  display:none;align-items:center;justify-content:center;
+}
+.login-overlay.show{display:flex;}
+.login-box{
+  width:340px;max-width:90%;background:var(--light);
+  border-radius:20px;padding:32px 24px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+.login-title{font-size:20px;font-weight:600;letter-spacing:2px;margin-bottom:4px;}
+.login-subtitle{font-size:12px;color:var(--gray);margin-bottom:24px;}
+.login-field{margin-bottom:16px;text-align:left;}
+.login-field label{display:block;font-size:12px;color:var(--gray);margin-bottom:6px;}
+.login-field input{
+  width:100%;padding:12px 16px;border:1px solid var(--soft);
+  border-radius:var(--radius);font-size:14px;outline:none;
+  transition:border-color .2s;background:#fff;
+}
+.login-field input:focus{border-color:var(--moss);}
+.login-error{color:var(--red);font-size:12px;margin-bottom:12px;min-height:18px;}
+.btn-login{
+  width:100%;padding:14px;background:var(--moss);color:#fff;
+  border:none;border-radius:var(--radius);font-size:15px;
+  font-weight:600;letter-spacing:2px;cursor:pointer;transition:var(--transition);
+}
+.btn-login:active{transform:scale(.97);}
+.login-close{
+  margin-top:16px;background:none;border:none;color:var(--gray);
+  font-size:13px;cursor:pointer;
+}
+
 /* ===== COMMUNITY PAGE ===== */
 .community-header{
   margin:16px 20px;background:linear-gradient(135deg,var(--ink),var(--moss));
@@ -326,6 +510,7 @@ body{
   padding:8px 0;border-bottom:1px solid var(--soft);
 }
 .lb-item:last-child{border:none;}
+.lb-item.is-me{background:rgba(201,169,110,.1);border-radius:8px;padding:8px;margin:-4px -4px;margin-bottom:4px;}
 .lb-rank{width:24px;text-align:center;font-weight:700;font-size:14px;}
 .lb-rank.gold{color:#d4a843;}
 .lb-rank.silver{color:#a0a0a0;}
@@ -333,6 +518,7 @@ body{
 .lb-avatar{width:32px;height:32px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:14px;}
 .lb-name{flex:1;font-size:13px;}
 .lb-score{font-size:12px;color:var(--gold);font-weight:600;}
+.lb-detail{font-size:10px;color:var(--gray);}
 
 .chat-section{margin:0 20px 16px;}
 .chat-messages{
@@ -371,6 +557,23 @@ body{
   background:var(--cream);border-radius:16px;padding:4px 10px 4px 4px;font-size:11px;
 }
 .member-chip-avatar{width:20px;height:20px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:9px;}
+
+/* Knowledge Rank Leaderboard */
+.knowledge-lb{margin:0 20px 16px;background:#fff;border-radius:var(--radius);padding:16px;box-shadow:0 2px 12px var(--shadow);}
+.knowledge-lb .lb-courses{font-size:10px;color:var(--gray);}
+.knowledge-lb-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--soft);}
+.knowledge-lb-item:last-child{border:none;}
+.knowledge-lb-info{flex:1;min-width:0;}
+.knowledge-lb-name{font-size:13px;font-weight:500;}
+.knowledge-lb-badges{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap;}
+.knowledge-lb-badges .mini-badge{font-size:9px;padding:1px 5px;border-radius:6px;font-weight:600;}
+.mini-badge.rank-mengxue{background:#e0e0e0;color:#616161;}
+.mini-badge.rank-xiuye{background:#e3f2fd;color:#1565c0;}
+.mini-badge.rank-mingbian{background:#e8f5e9;color:#2e7d32;}
+.mini-badge.rank-zhizhi{background:#f3e5f5;color:#7b1fa2;}
+.mini-badge.rank-dengfeng{background:#fff8e1;color:#bf8c00;}
+.knowledge-score{font-size:16px;font-weight:700;color:#7b1fa2;white-space:nowrap;}
+.knowledge-score-label{font-size:10px;color:var(--gray);font-weight:400;}
 
 /* ===== MEDITATION PAGE ===== */
 .meditation-visual{
@@ -607,7 +810,7 @@ body{
     <div class="course-list" id="course-list"></div>
   </div>
 
-  <!-- ==================== CHECKIN PAGE (sub of profile) ==================== -->
+  <!-- ==================== CHECKIN PAGE ==================== -->
   <div class="page" id="page-checkin">
     <div class="page-header">
       <div class="page-title">打卡中心</div>
@@ -660,6 +863,7 @@ body{
 
     <div class="sub-tabs">
       <div class="sub-tab active" onclick="switchCommunityTab('rank',this)">打卡排行</div>
+      <div class="sub-tab" onclick="switchCommunityTab('knowledge',this)">学识排行</div>
       <div class="sub-tab" onclick="switchCommunityTab('chat',this)">讨论区</div>
       <div class="sub-tab" onclick="switchCommunityTab('members',this)">班级成员</div>
     </div>
@@ -668,6 +872,14 @@ body{
       <div class="leaderboard">
         <div class="lb-title">🏆 今日打卡排行榜</div>
         <div id="leaderboard-list"></div>
+      </div>
+    </div>
+
+    <div id="community-knowledge" style="display:none">
+      <div class="knowledge-lb">
+        <div class="lb-title">📚 学识排行榜</div>
+        <div style="font-size:11px;color:var(--gray);margin-bottom:12px;">综合评定：已完成课程考试数量 + 各课程档位加权</div>
+        <div id="knowledge-leaderboard"></div>
       </div>
     </div>
 
@@ -691,10 +903,11 @@ body{
 
   <!-- ==================== PROFILE PAGE ==================== -->
   <div class="page" id="page-profile">
-    <div class="profile-header">
+    <div class="profile-header" id="profile-header-area" onclick="handleProfileHeaderClick()">
       <div class="avatar" id="profile-avatar">道</div>
       <div class="profile-name" id="profile-name">修炼者</div>
       <div class="profile-level" id="profile-level">初窥门径</div>
+      <div class="profile-login-hint" id="profile-login-hint" style="display:none;">点击启卷</div>
     </div>
 
     <div class="profile-stats">
@@ -722,6 +935,8 @@ body{
     <div id="profile-diary" style="display:none"></div>
     <div id="profile-meditation" style="display:none"></div>
     <div id="profile-membership" style="display:none"></div>
+
+    <div id="profile-logout-area"></div>
   </div>
 
   <!-- ==================== COURSE DETAIL MODAL ==================== -->
@@ -744,6 +959,42 @@ body{
         <div class="modal-title">真值日记</div>
       </div>
       <div class="diary-form" id="diary-form-content"></div>
+    </div>
+  </div>
+
+  <!-- ==================== EXAM MODAL (Full Screen) ==================== -->
+  <div class="exam-overlay" id="exam-overlay">
+    <div class="exam-header">
+      <div class="exam-header-title" id="exam-header-title">自砺考试</div>
+      <button class="exam-close" onclick="closeExam()">✕</button>
+    </div>
+    <div class="exam-progress">
+      <div class="exam-progress-bar"><div class="exam-progress-fill" id="exam-progress-fill" style="width:10%"></div></div>
+      <div class="exam-progress-text"><span id="exam-progress-num">1/10</span><span id="exam-progress-score"></span></div>
+    </div>
+    <div class="exam-body" id="exam-body"></div>
+    <div class="exam-footer" id="exam-footer">
+      <button class="btn-exam-prev" id="btn-exam-prev" onclick="examPrev()">上一题</button>
+      <button class="btn-exam-next" id="btn-exam-next" onclick="examNext()">下一题</button>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIN MODAL ==================== -->
+  <div class="login-overlay" id="login-overlay" onclick="closeLogin(event)">
+    <div class="login-box" onclick="event.stopPropagation()">
+      <div class="login-title">真值修炼营</div>
+      <div class="login-subtitle">启卷开启你的修炼之旅</div>
+      <div class="login-field">
+        <label>用户名</label>
+        <input type="text" id="login-username" placeholder="请输入用户名" maxlength="20" autocomplete="off">
+      </div>
+      <div class="login-field">
+        <label>密码</label>
+        <input type="password" id="login-password" placeholder="请输入密码" maxlength="30">
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn-login" onclick="doLogin()">启卷 / 注册</button>
+      <button class="login-close" onclick="closeLogin(null)">稍后启卷</button>
     </div>
   </div>
 
@@ -854,53 +1105,277 @@ for (let i = 8; i <= 21; i++) {
     21:{t:'第四十二章·道生一', th:'道的圆满，新的开始'}
   };
   COURSES.push({
-    day: i,
-    title: titles[i].t,
-    theme: titles[i].th,
-    chapter: '第'+i+'课',
-    original: '',reading: '',task: '',quote: ''
+    day: i, title: titles[i].t, theme: titles[i].th,
+    chapter: '第'+i+'课', original: '', reading: '', task: '', quote: ''
   });
 }
 
-// ==================== STATE ====================
-const STATE_KEY = 'zhenzhicamp_state';
-let state = loadState();
+// ==================== EXAM QUESTIONS (70 questions for 7 courses) ====================
+const EXAM_DATA = {
+  1: [
+    {q:'你在年终述职时，领导说"你的数据不够亮眼"。根据第一章的智慧，最佳的内心回应是：',o:['立刻反驳，列举自己的隐性贡献','沮丧地接受，觉得自己确实不行','提醒自己：数据只是一个"名"，无法完全定义我的价值','暗下决心明年一定要卷出最高KPI'],a:2},
+    {q:'同事小张总喜欢给别人贴标签："他就是个技术宅""她情商低"。从"名可名，非常名"的角度看，这种行为的问题在于：',o:['标签会限制我们对他人的全面认知','这样做太不礼貌了','标签其实很准确，节省认知成本','这是一种高效的团队管理方式'],a:0},
+    {q:'创业公司的CEO面临行业巨变，所有商业计划都变得不确定。根据"道可道，非常道"的启示，最智慧的做法是：',o:['坚持原计划不动摇，因为朝令夕改不好','立刻裁员收缩，保住现金流','接纳不确定性，保持敏锐观察，在变化中寻找新机会','模仿竞争对手的策略，跟着大公司走'],a:2},
+    {q:'你5岁的孩子画了一幅"奇怪"的画——太阳是方形的，树是蓝色的。从"无名天地之始"的角度看，最好的回应是：',o:['"太阳应该是圆的哦"纠正孩子','带孩子去看绘画教程','欣赏孩子不被常规定义束缚的想象力','让孩子重新画一幅"正确"的'],a:2},
+    {q:'朋友圈里大家都在晒升职、买房、考证，你却觉得自己"什么都没有"。第一章的智慧会怎样帮助你？',o:['赶紧也去考证，不能落后','这些"名"并不能定义一个人的全部价值，放下比较','确实应该反思自己为什么不够努力','把朋友圈关了眼不见心不烦'],a:1},
+    {q:'在做code review时，你习惯性地想"这段代码写得真烂"。修炼"常无欲以观其妙"后，更好的态度是：',o:['放下预判，先理解作者的设计意图，也许有你没想到的考量','还是要指出问题，代码质量很重要','不评价，直接approve','私下跟作者说代码需要重写'],a:0},
+    {q:'公司突然调整组织架构，你被调到一个完全陌生的业务线。根据第一章对"不确定性"的理解，最健康的心态是：',o:['焦虑不安，觉得自己被边缘化了','立刻开始投简历找下家','把这看作一次探索新可能的机会，保持开放心态','向HR投诉，要求回原部门'],a:2},
+    {q:'"故常无欲，以观其妙；常有欲，以观其徼"告诉我们观察世界需要两种视角。在项目复盘会上，这意味着：',o:['只看数据结果就够了','既要放空预设去发现意外收获，也要带着目标去分析边界','复盘没什么用，向前看更重要','让领导来总结就好'],a:1},
+    {q:'夫妻之间因为"你应该多做家务"产生争执。从第一章"放下定义"的角度看，问题的根源可能是：',o:['另一半确实太懒了','双方用固化的"定义"来要求对方，而忽略了真实的感受和需求','做家务本来就应该平均分配','这跟道德经没关系'],a:1},
+    {q:'你在购物时总是纠结"这个品牌好不好""性价比高不高"。第一章教给你的消费观是：',o:['买最贵的准没错','不要被品牌的"名"所束缚，关注物品本身是否真正适合自己的需要','什么都别买，极简主义','看测评网站的排名买'],a:1}
+  ],
+  2: [
+    {q:'团队里有个不起眼的"脏活"——整理项目文档和测试用例，没人愿意做。根据"上善若水"的精神，你会：',o:['这种活没有成长性，不值得做','主动承担，因为水善"处众人之所恶"，团队最需要的地方就是最好的位置','等领导安排再说','建议招个实习生来做'],a:1},
+    {q:'在团队会议中，两个同事为技术方案争执不下，气氛越来越紧张。学了"上善若水"后，最好的做法是：',o:['选一边站队，帮他赢','像水一样柔和地引导讨论，找到两种方案的共通点化解对立','保持沉默，事不关己','直接让领导做决定'],a:1},
+    {q:'你发现自己做了很多贡献但总是不被看到，而善于表现的同事总是得到表扬。根据"水善利万物而不争"：',o:['学习那个同事的"表演"技巧','不争眼前的曝光度，持续创造真实价值，时间会证明一切','向领导主动邀功','这说明公司文化有问题，该离开了'],a:1},
+    {q:'孩子的成绩在班上排名中游，你很焦虑。从"水善利万物而不争"的教育理念出发，更智慧的做法是：',o:['给孩子报更多补习班冲排名','接受排名只是一个维度，关注孩子的热情和独特才能，像水一样滋养而非push','让孩子知道你很失望，激发他的斗志','跟其他家长比较看谁的教育方法更好'],a:1},
+    {q:'"居善地，心善渊，与善仁，言善信，政善治，事善能，动善时"概括了水的七善。一个优秀的team leader应该最先学会哪个"善"？',o:['事善能——自己技术最强就行','居善地——找到最适合团队发展的定位','政善治——制定最严格的管理制度','言善信——说话算话比什么都重要'],a:1},
+    {q:'你刚换到一个新团队，发现大家的技术栈跟你之前用的完全不同。"水"的智慧教你：',o:['坚持自己的技术栈，因为你更有经验','像水一样适应新的"容器"，先融入再寻求改变','表面适应心里抵触','直接跟领导说这个技术栈不好'],a:1},
+    {q:'夫妻沟通中，伴侣抱怨你"总是加班不顾家"。根据"夫唯不争，故无尤"，最好的回应是：',o:['反驳：我加班还不是为了这个家','不争对错，先承认伴侣的感受，再一起商量如何平衡','沉默不语，冷处理','答应以后不加班了（虽然做不到）'],a:1},
+    {q:'同行业的朋友去了竞争对手公司，薪资翻倍。你内心有些动摇。"上善若水"如何指引你？',o:['立刻跳槽，薪资最重要','像水一样冷静评估——不被一时的落差驱动，思考自己真正想要什么样的成长','水不会主动流向高处，所以应该安于现状','找老板谈加薪，以跳槽为威胁'],a:1},
+    {q:'你在社交场合总是不知道说什么，觉得自己不够"社牛"。从水的品性来看：',o:['水不需要"社牛"，它安静地滋养万物，你的真诚倾听本身就是一种贡献','确实需要学习社交技巧','少参加社交活动就好了','模仿社牛朋友的说话方式'],a:0},
+    {q:'每次促销节你都忍不住囤一堆打折商品，但很多最后都浪费了。"上善若水"中水的特性如何启发你的消费观？',o:['水只流向需要它的地方——只购买真正需要的东西，而非被"打折"驱动','打折买确实省钱，没问题','以后绝对不买打折品','让别人帮你把关，限制你的消费'],a:0}
+  ],
+  3: [
+    {q:'项目deadline很紧，产品经理临时加了个需求。你很想拒绝，但学了"曲则全"后，更好的策略是：',o:['直接拒绝，说"不在需求范围内"','先理解需求的价值，然后提出分期交付或置换其他需求的方案，柔性达成目标','默默接受，通宵赶工','让领导来做坏人拒绝'],a:1},
+    {q:'"不自见，故明"在职场中的最佳实践是：',o:['不发表任何意见，当透明人','不执着于"我的观点必须被采纳"，反而能更客观地看到全局','自己的见解最重要，一定要坚持','把所有想法都憋在心里'],a:1},
+    {q:'你的创业伙伴提出了一个你认为有风险的方向调整。根据"曲则全，枉则直"，你应该：',o:['坚决反对，列出所有风险','先顺着伙伴的思路走一段，同时暗中准备B方案，用实践来验证而非争论','同意他的方案，出了问题是他的责任','把合伙关系解散了'],a:1},
+    {q:'孩子考试没考好回家哭了。老子说"洼则盈"——低处反而能盈满。你对孩子最好的引导是：',o:['"你看别人家孩子都考得多好"','告诉孩子失败是一个"低洼"的时刻，正是积蓄力量的机会，越是低谷越能装下成长','安慰孩子说"没关系分数不重要"','直接给孩子请家教补课'],a:1},
+    {q:'公司里有个同事总喜欢在大会上炫耀自己的成绩。根据"不自伐，故有功"，你对这种行为的理解是：',o:['他很优秀，应该学习','真正的功绩不需要自我夸耀，过度炫耀反而会引起反感，减损自己的影响力','他这样做一定有他的原因','在职场确实需要自我营销'],a:1},
+    {q:'夫妻因为"该不该让父母来帮忙带孩子"意见不合。"曲则全"教你怎样沟通更好？',o:['坚持自己的立场，因为你是对的','各退一步，先试行一个月看看效果，用"弯曲"代替"硬刚"','冷战到对方让步','让父母自己做决定'],a:1},
+    {q:'"少则得，多则惑"对你管理个人精力的启发是：',o:['做得越多成就越大','同时追逐太多目标反而迷失方向，聚焦少数关键事项才能真正有所收获','什么都不做最好','把所有兴趣爱好都砍掉只做工作'],a:1},
+    {q:'领导当众批评了你的方案。你觉得很没面子，内心想反驳。"曲则全"提示你的最佳做法是：',o:['当场反驳维护尊严','先接受批评（弯曲），回去完善方案用更好的结果来说话（全）','从此再也不主动提方案了','在背后说领导的坏话出气'],a:1},
+    {q:'你在社交媒体上看到一个观点你极度不认同。从"不自是，故彰"的角度，最好的做法是：',o:['写长篇反驳文章','不急于表态"我是对的"，先理解对方观点的合理之处，你的观点反而会更加鲜明','取消关注，眼不见为净','到评论区跟他辩论到底'],a:1},
+    {q:'逛商场时，导购不断推荐昂贵的商品，说"这个更有档次"。根据"多则惑"的道理，你应该：',o:['买贵的确实更好','选择太多反而迷惑，回归自己的真实需求，不被外部声音带偏','什么都不买了','让导购帮你做决定'],a:1}
+  ],
+  4: [
+    {q:'你在互联网大厂工作5年了，突然有猎头说另一家公司能给你double的薪资。根据"知人者智，自知者明"，你首先应该：',o:['立刻接offer，钱多就是好','先深入了解自己：你真正想要的是什么？薪资是唯一的衡量标准吗？','让猎头去联系你领导看看能不能涨薪','纠结半年最后啥也没做'],a:1},
+    {q:'"胜人者有力，自胜者强"在戒掉刷手机习惯这件事上的体现是：',o:['让家人帮你管手机','核心不在于战胜诱惑，而在于战胜自己内心的空虚和逃避——从根源上自我觉察','卸载所有社交App','设置使用时间限制'],a:1},
+    {q:'团队做季度review，你发现自己的产出确实不如一个后辈。"知足者富"在这个场景中意味着：',o:['安于现状不用努力了','承认差距但不否定自己，看到自己在经验、稳定性等方面的独特价值','这说明"知足"不适用于职场','找领导谈谈是不是该换组'],a:1},
+    {q:'你的孩子总是说"我不如班上的小明"。根据"自知者明"，你应该引导孩子：',o:['"你确实要向小明学习"','帮助孩子发现自己独特的闪光点，理解自知比与人比较更有价值','告诉孩子"你比小明强"','让孩子跟小明交朋友，近朱者赤'],a:1},
+    {q:'你做了一个很有创意的方案，同事却不认可。"强行者有志"这句话对你的鼓励是：',o:['放弃这个方案吧','即使遇到阻力仍然坚持推进，有恒心毅力的人才有志向','同事都不认可说明方案有问题','降低预期，做个折中版本'],a:1},
+    {q:'你的朋友经常炫耀名牌、旅行、高消费。你开始怀疑自己的生活方式。"知足者富"如何帮你？',o:['确实应该提升生活品质','真正的富足是内心的满足——认清自己拥有的已经很多，不被他人的消费标准定义','也去买名牌跟上潮流','直接跟朋友说别炫了'],a:1},
+    {q:'"不失其所者久"对职业规划的启示是：',o:['一直待在一个公司不跳槽','找到并坚守自己的核心定位和价值观，无论外部环境如何变化','只做自己会做的事不要尝试新领域','不失去任何东西包括不辞职'],a:1},
+    {q:'你总觉得自己不够好——技术不如张三、管理不如李四、沟通不如王五。第三十三章会告诉你：',o:['确实需要全面提升自己','与其跟别人的长处比，不如深刻了解自己、战胜自己的短板，这才是真正的强大','人无完人，接受就好了','找到一个你比别人都强的领域'],a:1},
+    {q:'夫妻因为教育方式不同产生矛盾——你觉得孩子要快乐教育，伴侣觉得要严格管教。"知人者智"提醒你：',o:['你的想法是对的，要说服伴侣','先"知人"——理解伴侣这样想的原因和担忧，而不只是坚持自己的观点','看育儿专家怎么说就怎么做','各管各的互不干涉'],a:1},
+    {q:'你想学一门新技能（比如AI），但觉得自己年龄大了来不及了。从"死而不亡者寿"的智慧来看：',o:['确实晚了，认清现实','精神的成长没有年龄限制，真正有价值的东西会超越时间——勇敢开始吧','学个皮毛就够了','让年轻人去学吧'],a:1}
+  ],
+  5: [
+    {q:'你是团队里最资深的开发，新来的实习生提出了一个你觉得"不够成熟"的方案。从"柔弱者生之徒"的角度看，最好的做法是：',o:['直接否定他的方案，你更有经验','像柔软的水一样倾听他的想法，也许新视角中有你错过的创新点','让他先按自己的做，出了问题再说','写邮件给领导说实习生太嫩了'],a:1},
+    {q:'一个在公司强势了十年的高管突然被新业务浪潮淘汰。"兵强则灭，木强则折"揭示的规律是：',o:['他运气不好','过度强硬和固化最终会被淘汰，保持柔软和适应力才能长久','这是公司的问题不是他的问题','他应该更强硬地抵制变革'],a:1},
+    {q:'你在code review中发现同事的代码虽然能运行但设计很僵硬，不易扩展。你联想到"坚强者死之徒"，最好的反馈方式是：',o:['"这代码太死板了，重写吧"','用柔和的方式提出建议，比如"如果未来需求变化，我们可以考虑让这个模块更灵活一些"','不说了，反正能跑就行','在代码评论里写一段道德经'],a:1},
+    {q:'你的孩子在学校被欺负了，你很愤怒想去找对方家长理论。"柔弱处上"的智慧建议你：',o:['必须去讨个说法','先冷静下来（柔），用沟通而非对抗的方式解决，这样的处理结果往往更好','告诉孩子忍忍就过去了','直接找老师和校长'],a:1},
+    {q:'"人之生也柔弱，其死也坚强"给我们的生活态度启示是：',o:['活着就要柔弱没有脾气','保持内心柔软、开放和弹性，而非变得越来越固执僵化','婴儿什么都不懂所以柔弱','这只是一个比喻不能当真'],a:1},
+    {q:'项目遇到了严重的技术瓶颈，团队里有人说"不行就放弃吧"，有人说"死磕到底"。老子的"柔弱"智慧会怎么指导你？',o:['死磕到底，不能放弃','硬刚可能折断，不如像水一样换条路——从侧面寻找新的技术方案','放弃吧，命里有时终须有','投票决定'],a:1},
+    {q:'你在管理团队时发现，越是强制要求加班，团队士气越低。这印证了道德经哪个观点？',o:['"草木之生也柔脆"——团队需要柔性管理而非刚性施压','管理就是要严格，松了出不了成绩','换一批更能加班的人','给加班费就好了'],a:0},
+    {q:'你的伴侣性格很倔强，总是不愿意退让。你自己也是。"强大处下，柔弱处上"教你的沟通之道是：',o:['谁更强势谁赢','主动柔软一些、先退一步的那个人，其实站在了更高的位置','既然都很倔就分开吧','找第三方来调解'],a:1},
+    {q:'你面临裁员风险，内心充满恐惧和焦虑，整个人变得很"刚"（紧绷）。"柔弱者生之徒"如何帮助你？',o:['越紧绷越容易折断——允许自己感到脆弱，用柔软的心态面对变化，保持学习和适应力','确实该紧张，赶紧投简历','装作无所谓的样子','一切都是命'],a:0},
+    {q:'你总觉得承认"我不知道"是一种软弱。但从第七十六章来看：',o:['确实应该隐藏自己不知道的部分','承认"不知道"恰恰是柔软和真实的表现，反而能赢得信任并打开学习的大门','在职场绝对不能说不知道','只能在亲密的人面前说不知道'],a:1}
+  ],
+  6: [
+    {q:'你每天有10多个会议，邮件和消息不断弹出。根据"致虚极，守静笃"，你最应该做的改变是：',o:['更高效地多线程处理','每天留出一段"虚"的时间——关掉通知、什么都不做，让大脑归零重启','请助理帮你处理消息','换一个不那么忙的工作'],a:1},
+    {q:'你的孩子注意力总是不集中，写作业时手机、玩具、零食一样不少。"归根曰静"给你的教育启示是：',o:['严厉训斥，要求他专心','帮孩子营造一个"静"的环境——减少干扰源，培养专注力，这是回归内心根本的过程','孩子天性好动，长大就好了','给孩子吃专注力保健品'],a:1},
+    {q:'"万物并作，吾以观复"的意思是在万物运动中观察回归的规律。这对做产品决策的启发是：',o:['追随每一个市场热点','在行业喧嚣中保持冷静观察，看清哪些是短暂泡沫、哪些是长期趋势','不理会市场变化，坚持自己的路','让数据分析师去操心'],a:1},
+    {q:'你失恋了，心里很乱。朋友叫你去KTV唱歌散心、去购物发泄。但"致虚极"的方式是：',o:['朋友说得对，要转移注意力','也许此刻需要的不是更多的刺激和填充，而是让内心安静下来，给自己一段空白的时间','赶紧找下一段恋情','把前任的东西都扔了'],a:1},
+    {q:'"不知常，妄作凶"警告我们不了解规律就盲目行动的后果。在投资理财中，这意味着：',o:['看别人赚了就跟着投','先了解投资的基本规律，不要被FOMO情绪驱动盲目入场','不投资最安全','只买大公司的股票'],a:1},
+    {q:'你发现自己好久没有产出好的创意了，每天都在重复性工作中消耗。"致虚极"如何帮你恢复创造力？',o:['更努力地工作加倍产出','给自己留出"空白"的时间——只有清空了杯子，才能装入新的水','看看别人的创意抄一抄','换一份有创意要求的工作'],a:1},
+    {q:'你和伴侣吵完架都在生气。"归根曰静，静曰复命"教你的和解之道是：',o:['谁先道歉谁输','让双方都冷静下来（归静），回到最初在一起的初心（复命），再来沟通','冷战到对方先低头','发微信讲道理'],a:1},
+    {q:'老板突然说要在一周内完成一个"不可能"的项目。你很焦虑，内心像沸腾的水。"守静笃"告诉你：',o:['越焦虑越混乱——先让自己安静下来，冷静评估资源和路径，再做出合理计划','立刻开干争分夺秒','告诉老板这不可能','找同事一起吐槽缓解压力'],a:0},
+    {q:'每次打开手机，各种推送让你忍不住刷了一个小时。从"致虚极"的角度，问题的本质是：',o:['手机APP太吸引人了','内心的"虚"没有被满足，所以用外部信息来填充——但越填越空，需要从内心找到安定','把手机扔了','设置青少年模式限制自己'],a:1},
+    {q:'你在周末终于有空了，却不知道做什么——习惯性地打开手机，又关上。"知常容，容乃公"对此的指导是：',o:['学习了解自己内心节奏的规律，接纳偶尔的空白和无聊，这才是包容自己','赶紧安排活动把时间填满','什么都不想做就是懒','看看朋友在干嘛跟着做'],a:0}
+  ],
+  7: [
+    {q:'你的工作邮箱里有3000封未读邮件，浏览器收藏夹有500个链接。"圣人不积"直接给你的建议是：',o:['这些以后可能有用，先留着','果断清理——真正有智慧的人不囤积信息，需要的时候再搜索远比囤积有效','请助理帮你分类整理','换个邮箱重新开始'],a:1},
+    {q:'"信言不美，美言不信"在职场中的体现是：',o:['说话好听的人都不可信','真诚直接的反馈虽然不好听但更有价值，过度包装的话术反而让人不信任','工作中就应该说好听的话','两种都可以看情况'],a:1},
+    {q:'你手上同时接了5个项目，每个都在推进但每个都做得一般。"知者不博，博者不知"告诉你：',o:['能者多劳，多做多学','追求广博反而什么都学不深——砍掉一些项目，集中精力把少数几个做到极致','5个项目都是领导安排的没办法','再多招几个人分担'],a:1},
+    {q:'你的孩子什么兴趣班都想报——钢琴、编程、绘画、跆拳道、英语。"少则得，多则惑"的育儿智慧是：',o:['多学点没坏处','减少兴趣班数量，让孩子在少数几个真正热爱的方向深入探索，收获更大','让孩子自己选择','都报上试试，不喜欢再退'],a:1},
+    {q:'"既以为人，己愈有；既以与人，己愈多"在团队协作中的体现是：',o:['把自己的经验分享给团队成员，看似"给出去"了，但你的理解反而更深了，团队也更强了','知识就是力量，不能随便分享','做好自己的事就行','分享了别人超过你怎么办'],a:0},
+    {q:'朋友圈各种知识付费课程让你心动——"21天学会XX""30天精通XX"。根据"博者不知"，你应该：',o:['都买了学习提升自己','与其买100门浅尝辄止的课，不如选1-2门真正深入学习——博不如专','这些都是骗钱的不要买','看免费的就行了'],a:1},
+    {q:'"善者不辩，辩者不善"让你重新思考网络争论。最佳的做法是：',o:['有错必辩，不能让错误观点传播','真正有能力的人不需要通过争辩来证明自己——把争辩的时间用来做事','在网上要勇于发声','永远不发表任何观点'],a:1},
+    {q:'你在双十一冲动消费后堆了一堆用不上的东西。"圣人不积"的消费观是：',o:['打折确实很划算，囤着总会用的','不囤积——只买当下真正需要的，多余的物品带来的不是安全感而是负担','以后不参加双十一了','全部退货'],a:1},
+    {q:'你作为团队leader，总想什么都自己来才放心。"天之道，利而不害"告诉你：',o:['确实自己做最靠谱','天的法则是有利于万物而不是伤害——放手让团队成员成长，利他才是最好的领导力','下属做不好怎么办','招更优秀的人然后自己就轻松了'],a:1},
+    {q:'"为而不争"是整部道德经的结尾箴言。在你的人生中，最好的理解是：',o:['做了事不求回报太傻了','持续做有价值的事情，但不与人争名利——这种"无争"的做事态度，反而能走得最远','什么都别做也别争','做事就要争第一否则没意义'],a:1}
+  ]
+};
 
-function defaultState() {
-  return {
-    currentDay: 1,
-    checkins: {},      // {dayIndex: {energy, mood, date}}
-    totalEnergy: 0,
-    streak: 0,
-    diaries: [],
-    chatMessages: [],
-    badges: {},
-    userName: '修炼者'
-  };
+// ==================== RANK DEFINITIONS ====================
+const RANK_DEFS = [
+  {min:60,max:69,name:'蒙学',cls:'rank-mengxue',meaning:'初步领悟',color:'#9e9e9e'},
+  {min:70,max:79,name:'修业',cls:'rank-xiuye',meaning:'勤勉修习',color:'#1565c0'},
+  {min:80,max:89,name:'明辨',cls:'rank-mingbian',meaning:'明察善辨',color:'#2e7d32'},
+  {min:90,max:99,name:'致知',cls:'rank-zhizhi',meaning:'深入致知',color:'#7b1fa2'},
+  {min:100,max:100,name:'登峰',cls:'rank-dengfeng',meaning:'登峰造极',color:'#bf8c00'}
+];
+
+function getRank(score) {
+  if (score < 60) return null;
+  return RANK_DEFS.find(r => score >= r.min && score <= r.max) || null;
 }
 
-function loadState() {
+// ==================== AUTH & USER SYSTEM ====================
+const USERS_REGISTRY_KEY = 'zhenzhicamp_users';
+let currentUser = null; // null = not logged in
+
+function getAllUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_REGISTRY_KEY)) || {}; } catch(e) { return {}; }
+}
+function saveAllUsers(users) {
+  localStorage.setItem(USERS_REGISTRY_KEY, JSON.stringify(users));
+}
+
+function getUserStateKey(username) {
+  return 'user_' + username + '_state';
+}
+
+function loadUserState(username) {
   try {
-    const s = localStorage.getItem(STATE_KEY);
+    const s = localStorage.getItem(getUserStateKey(username));
     if (s) return {...defaultState(), ...JSON.parse(s)};
   } catch(e) {}
   return defaultState();
 }
 
+function saveUserState(username, st) {
+  localStorage.setItem(getUserStateKey(username), JSON.stringify(st));
+}
+
+// Legacy state for non-logged-in / migration
+const LEGACY_STATE_KEY = 'zhenzhicamp_state';
+
+function defaultState() {
+  return {
+    currentDay: 1,
+    checkins: {},
+    totalEnergy: 0,
+    streak: 0,
+    diaries: [],
+    chatMessages: [],
+    badges: {},
+    userName: '修炼者',
+    examScores: {} // {courseDay: latestScore}
+  };
+}
+
+let state = defaultState();
+
+function loadState() {
+  if (currentUser) {
+    state = loadUserState(currentUser);
+    state.userName = currentUser;
+  } else {
+    try {
+      const s = localStorage.getItem(LEGACY_STATE_KEY);
+      if (s) state = {...defaultState(), ...JSON.parse(s)};
+      else state = defaultState();
+    } catch(e) { state = defaultState(); }
+  }
+  if (!state.examScores) state.examScores = {};
+}
+
 function saveState() {
-  localStorage.setItem(STATE_KEY, JSON.stringify(state));
+  if (currentUser) {
+    saveUserState(currentUser, state);
+  } else {
+    localStorage.setItem(LEGACY_STATE_KEY, JSON.stringify(state));
+  }
+}
+
+// Check if already logged in
+function initAuth() {
+  const saved = localStorage.getItem('zhenzhicamp_current_user');
+  if (saved) {
+    const users = getAllUsers();
+    if (users[saved]) {
+      currentUser = saved;
+    }
+  }
+  loadState();
+}
+
+function doLogin() {
+  const usernameEl = document.getElementById('login-username');
+  const passwordEl = document.getElementById('login-password');
+  const errorEl = document.getElementById('login-error');
+  const username = usernameEl.value.trim();
+  const password = passwordEl.value;
+
+  errorEl.textContent = '';
+
+  if (!username) { errorEl.textContent = '请输入用户名'; return; }
+  if (username.length < 2) { errorEl.textContent = '用户名至少2个字符'; return; }
+  if (!password) { errorEl.textContent = '请输入密码'; return; }
+  if (password.length < 3) { errorEl.textContent = '密码至少3个字符'; return; }
+
+  const users = getAllUsers();
+
+  if (users[username]) {
+    // User exists — check password
+    if (users[username].password === password) {
+      currentUser = username;
+      localStorage.setItem('zhenzhicamp_current_user', username);
+      loadState();
+      closeLogin(null);
+      showToast('欢迎回来，' + username);
+      renderProfile();
+    } else {
+      errorEl.textContent = '密码错误';
+    }
+  } else {
+    // New user — register
+    users[username] = { password: password, createdAt: Date.now() };
+    saveAllUsers(users);
+    currentUser = username;
+    localStorage.setItem('zhenzhicamp_current_user', username);
+    // Initialize state for new user
+    state = defaultState();
+    state.userName = username;
+    saveState();
+    closeLogin(null);
+    showToast('注册成功，已启卷');
+    renderProfile();
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  localStorage.removeItem('zhenzhicamp_current_user');
+  state = defaultState();
+  try {
+    const s = localStorage.getItem(LEGACY_STATE_KEY);
+    if (s) state = {...defaultState(), ...JSON.parse(s)};
+  } catch(e) {}
+  showToast('已合卷');
+  renderProfile();
+}
+
+function openLogin() {
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').textContent = '';
+  const overlay = document.getElementById('login-overlay');
+  overlay.classList.add('show');
+}
+
+function closeLogin(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('login-overlay').classList.remove('show');
+}
+
+function handleProfileHeaderClick() {
+  if (!currentUser) {
+    openLogin();
+  }
 }
 
 // ==================== NAVIGATION ====================
 function switchTab(tab) {
-  document.querySelectorAll('.page').forEach(p => {p.classList.remove('active');});
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
 
   const pageId = 'page-' + tab;
   const page = document.getElementById(pageId);
   if (page) {
     page.classList.add('active');
-    // Smooth fade
     page.style.opacity = '0';
     requestAnimationFrame(() => { page.style.opacity = '1'; });
   }
@@ -910,7 +1385,6 @@ function switchTab(tab) {
   const idx = tabMap.indexOf(tab);
   if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
 
-  // Render page content
   if (tab === 'course') renderCourseList();
   if (tab === 'checkin') renderCheckin();
   if (tab === 'community') renderCommunity();
@@ -942,14 +1416,34 @@ function renderCourseList() {
     let statusClass = isCompleted ? 'completed' : (isCurrent ? 'current' : 'locked');
     let statusText = isCompleted ? '已完成' : (isCurrent ? '进行中' : '🔒');
 
-    html += `<div class="course-card ${statusClass}" onclick="${isLocked ? '' : 'openCourseDetail('+i+')'}">
-      <div class="course-day">${c.day}</div>
-      <div class="course-info">
-        <div class="course-name">${c.title}</div>
-        <div class="course-desc">${c.theme}</div>
-      </div>
-      <div class="course-status">${statusText}</div>
-    </div>`;
+    // Exam badge
+    let badgeHtml = '';
+    const examScore = state.examScores[c.day];
+    if (examScore !== undefined && examScore >= 60) {
+      const rank = getRank(examScore);
+      if (rank) {
+        badgeHtml = '<div class="course-badge ' + rank.cls + '">' + rank.name + '</div>';
+      }
+    }
+
+    // Inline exam button for current and completed courses (not locked)
+    let examBtnHtml = '';
+    if (!isLocked && c.day <= 7) {
+      examBtnHtml = '<button class="btn-exam-inline" onclick="event.stopPropagation();startExam(' + c.day + ')">自砺</button>';
+    }
+
+    html += '<div class="course-card ' + statusClass + '" onclick="' + (isLocked ? '' : 'openCourseDetail('+i+')') + '">' +
+      badgeHtml +
+      '<div class="course-day">' + c.day + '</div>' +
+      '<div class="course-info">' +
+        '<div class="course-name">' + c.title + '</div>' +
+        '<div class="course-desc">' + c.theme + '</div>' +
+      '</div>' +
+      '<div class="course-card-right">' +
+        '<div class="course-status">' + statusText + '</div>' +
+        examBtnHtml +
+      '</div>' +
+    '</div>';
   });
   list.innerHTML = html;
 }
@@ -964,35 +1458,51 @@ function openCourseDetail(index) {
 
   let body = '';
   if (c.original) {
-    body += `<div class="modal-section">
-      <div class="modal-section-title">📜 道德经原文</div>
-      <div class="original-text">${c.original}</div>
-    </div>`;
+    body += '<div class="modal-section">' +
+      '<div class="modal-section-title">📜 道德经原文</div>' +
+      '<div class="original-text">' + c.original + '</div></div>';
   }
   if (c.reading) {
-    body += `<div class="modal-section">
-      <div class="modal-section-title">💡 现代解读</div>
-      <div class="modern-reading">${c.reading}</div>
-    </div>`;
+    body += '<div class="modal-section">' +
+      '<div class="modal-section-title">💡 现代解读</div>' +
+      '<div class="modern-reading">' + c.reading + '</div></div>';
   }
   if (c.task) {
-    body += `<div class="modal-section">
-      <div class="modal-section-title">🎯 今日实践任务</div>
-      <div class="practice-task"><p>${c.task.replace(/\n/g, '<br>')}</p></div>
-    </div>`;
+    body += '<div class="modal-section">' +
+      '<div class="modal-section-title">🎯 今日实践任务</div>' +
+      '<div class="practice-task"><p>' + c.task.replace(/\n/g, '<br>') + '</p></div></div>';
   }
   if (c.quote) {
-    body += `<div class="modal-section">
-      <div class="modal-section-title">✨ 能量金句</div>
-      <div class="energy-quote">"${c.quote}"</div>
-    </div>`;
+    body += '<div class="modal-section">' +
+      '<div class="modal-section-title">✨ 能量金句</div>' +
+      '<div class="energy-quote">"' + c.quote + '"</div></div>';
   }
+
+  // Exam score display
+  if (c.day <= 7) {
+    const examScore = state.examScores[c.day];
+    if (examScore !== undefined) {
+      const rank = getRank(examScore);
+      let rankHtml = '';
+      if (rank) {
+        rankHtml = '<span style="display:inline-block;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600;margin-left:8px;" class="course-badge ' + rank.cls + '">' + rank.name + ' · ' + rank.meaning + '</span>';
+      }
+      body += '<div class="modal-section" style="text-align:center;padding:16px;background:#fff;border-radius:var(--radius);box-shadow:0 1px 8px var(--shadow);">' +
+        '<div style="font-size:13px;color:var(--gray);margin-bottom:4px;">上次自砺成绩</div>' +
+        '<div style="font-size:28px;font-weight:700;color:var(--moss);">' + examScore + ' 分' + rankHtml + '</div></div>';
+    }
+
+    // Exam button
+    body += '<div class="modal-section" style="text-align:center;">' +
+      '<button class="btn-exam" style="display:inline-block;width:auto;padding:14px 48px;" onclick="startExam(' + c.day + ')">⚔ 自砺考试</button>' +
+      '<div style="font-size:11px;color:var(--gray);margin-top:8px;">10道单选题 · 满分100分 · 60分通过 · 可重复考试</div></div>';
+  }
+
   if (!c.original && !c.reading) {
-    body += `<div class="modal-section"><div class="modern-reading" style="text-align:center;padding:40px 20px;">
-      <div style="font-size:48px;margin-bottom:16px;">🔒</div>
-      <div style="font-size:16px;font-weight:600;margin-bottom:8px;">课程内容即将上线</div>
-      <div style="font-size:13px;color:var(--gray);">完成前面的课程后解锁完整内容</div>
-    </div></div>`;
+    body += '<div class="modal-section"><div class="modern-reading" style="text-align:center;padding:40px 20px;">' +
+      '<div style="font-size:48px;margin-bottom:16px;">🔒</div>' +
+      '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">课程内容即将上线</div>' +
+      '<div style="font-size:13px;color:var(--gray);">完成前面的课程后解锁完整内容</div></div></div>';
   }
 
   document.getElementById('modal-body').innerHTML = body;
@@ -1007,6 +1517,161 @@ function closeCourseModal(e) {
   modal.classList.remove('show');
   setTimeout(() => { modal.style.display = 'none'; }, 350);
 }
+
+// ==================== EXAM SYSTEM ====================
+let examState = {
+  courseDay: 0,
+  questions: [],
+  currentQ: 0,
+  answers: [], // user's selected index for each question, -1 = unanswered
+};
+
+function startExam(courseDay) {
+  const questions = EXAM_DATA[courseDay];
+  if (!questions || questions.length === 0) { showToast('该课程暂无考试题目'); return; }
+
+  // Close course modal first
+  const courseModal = document.getElementById('course-modal');
+  courseModal.classList.remove('show');
+  setTimeout(() => { courseModal.style.display = 'none'; }, 100);
+
+  examState = {
+    courseDay: courseDay,
+    questions: questions,
+    currentQ: 0,
+    answers: new Array(questions.length).fill(-1)
+  };
+
+  document.getElementById('exam-header-title').textContent = 'DAY ' + courseDay + ' · 自砺考试';
+  renderExamQuestion();
+  document.getElementById('exam-overlay').classList.add('show');
+}
+
+function renderExamQuestion() {
+  const q = examState.questions[examState.currentQ];
+  const idx = examState.currentQ;
+  const total = examState.questions.length;
+
+  // Progress
+  document.getElementById('exam-progress-fill').style.width = (((idx + 1) / total) * 100) + '%';
+  document.getElementById('exam-progress-num').textContent = (idx + 1) + '/' + total;
+
+  // Count answered
+  const answered = examState.answers.filter(a => a !== -1).length;
+  document.getElementById('exam-progress-score').textContent = '已答 ' + answered + '/' + total;
+
+  const labels = ['A', 'B', 'C', 'D'];
+  let html = '<div class="exam-question-num">第 ' + (idx + 1) + ' 题</div>' +
+    '<div class="exam-question-text">' + q.q + '</div>' +
+    '<div class="exam-options">';
+
+  q.o.forEach((opt, oi) => {
+    const selected = examState.answers[idx] === oi;
+    html += '<div class="exam-option ' + (selected ? 'selected' : '') + '" onclick="selectExamOption(' + oi + ')">' +
+      '<div class="exam-option-label">' + labels[oi] + '</div>' +
+      '<div class="exam-option-text">' + opt + '</div></div>';
+  });
+  html += '</div>';
+
+  document.getElementById('exam-body').innerHTML = html;
+
+  // Footer buttons
+  const isLast = idx === total - 1;
+  const isFirst = idx === 0;
+  document.getElementById('btn-exam-prev').disabled = isFirst;
+
+  const footer = document.getElementById('exam-footer');
+  if (isLast) {
+    footer.innerHTML = '<button class="btn-exam-prev" ' + (isFirst ? 'disabled' : '') + ' onclick="examPrev()">上一题</button>' +
+      '<button class="btn-exam-submit" onclick="submitExam()">提交试卷</button>';
+  } else {
+    footer.innerHTML = '<button class="btn-exam-prev" ' + (isFirst ? 'disabled' : '') + ' onclick="examPrev()">上一题</button>' +
+      '<button class="btn-exam-next" onclick="examNext()">下一题</button>';
+  }
+}
+
+function selectExamOption(optIdx) {
+  examState.answers[examState.currentQ] = optIdx;
+  renderExamQuestion();
+}
+
+function examNext() {
+  if (examState.currentQ < examState.questions.length - 1) {
+    examState.currentQ++;
+    renderExamQuestion();
+    document.getElementById('exam-body').scrollTop = 0;
+  }
+}
+
+function examPrev() {
+  if (examState.currentQ > 0) {
+    examState.currentQ--;
+    renderExamQuestion();
+    document.getElementById('exam-body').scrollTop = 0;
+  }
+}
+
+function submitExam() {
+  const unanswered = examState.answers.filter(a => a === -1).length;
+  if (unanswered > 0) {
+    if (!confirm('还有 ' + unanswered + ' 题未作答（将计为0分），确认提交吗？')) return;
+  }
+
+  // Calculate score
+  let correct = 0;
+  examState.questions.forEach((q, i) => {
+    if (examState.answers[i] === q.a) correct++;
+  });
+  const score = correct * 10;
+
+  // Save score (latest score)
+  state.examScores[examState.courseDay] = score;
+  saveState();
+
+  // Show result
+  const rank = getRank(score);
+  let rankHtml = '';
+  let msgHtml = '';
+
+  if (score < 60) {
+    rankHtml = '<div style="font-size:18px;color:var(--red);margin:12px 0;">未通过</div>';
+    msgHtml = '需要60分才能通过考试。<br>重新回顾课程内容，再来挑战吧！';
+  } else {
+    rankHtml = '<div class="exam-result-rank ' + rank.cls + '">' + rank.name + ' · ' + rank.meaning + '</div>';
+    if (score === 100) {
+      msgHtml = '完美！你已经深刻领悟了这一课的精髓，登峰造极！';
+    } else if (score >= 90) {
+      msgHtml = '非常出色！你对这一课有很深入的理解，继续精进！';
+    } else if (score >= 80) {
+      msgHtml = '很好！你已经能够明辨是非，举一反三了。';
+    } else if (score >= 70) {
+      msgHtml = '不错的成绩！保持勤勉修习的态度继续加油。';
+    } else {
+      msgHtml = '已经入门了！回顾课程内容可以帮助你更上一层楼。';
+    }
+  }
+
+  const body = document.getElementById('exam-body');
+  body.innerHTML = '<div class="exam-result">' +
+    '<div style="font-size:48px;margin-bottom:8px;">' + (score >= 60 ? '🎊' : '📚') + '</div>' +
+    '<div style="font-size:14px;color:var(--gray);">DAY ' + examState.courseDay + ' 自砺成绩</div>' +
+    '<div class="exam-result-score">' + score + '</div>' +
+    '<div style="font-size:13px;color:var(--gray);margin-bottom:8px;">答对 ' + correct + '/' + examState.questions.length + ' 题</div>' +
+    rankHtml +
+    '<div class="exam-result-msg">' + msgHtml + '</div>' +
+    '<div>' +
+      '<button class="btn-exam-retry" onclick="startExam(' + examState.courseDay + ')">再次挑战</button>' +
+      '<button class="btn-exam-back" onclick="closeExam()">返回课程</button>' +
+    '</div></div>';
+
+  document.getElementById('exam-footer').innerHTML = '';
+}
+
+function closeExam() {
+  document.getElementById('exam-overlay').classList.remove('show');
+  // Refresh course list if visible
+  if (document.getElementById('page-course').classList.contains('active')) renderCourseList();
+}
 </script>
 <script>
 // ==================== CHECKIN SYSTEM ====================
@@ -1019,7 +1684,6 @@ function renderCheckin() {
 
 function updateCheckinStreak() {
   let streak = 0;
-  const today = new Date();
   for (let i = state.currentDay - 1; i >= 0; i--) {
     if (state.checkins[i]) streak++;
     else break;
@@ -1062,10 +1726,8 @@ function doCheckin() {
   };
   state.totalEnergy += energy;
 
-  // Advance day
   if (state.currentDay < 21) state.currentDay++;
 
-  // Check badges
   checkBadges();
   saveState();
 
@@ -1087,7 +1749,7 @@ function renderCalendar() {
     else if (isToday) cls = 'today';
     else if (isFuture) cls = 'future';
 
-    html += `<div class="cal-day ${cls}">${i + 1}</div>`;
+    html += '<div class="cal-day ' + cls + '">' + (i + 1) + '</div>';
   }
   grid.innerHTML = html;
 }
@@ -1098,7 +1760,6 @@ function renderEnergyChart() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  // Adjust for device pixel ratio
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement;
   canvas.width = rect.clientWidth * dpr;
@@ -1113,10 +1774,8 @@ function renderEnergyChart() {
   const chartW = W - padL - padR;
   const chartH = H - padT - padB;
 
-  // Clear
   ctx.clearRect(0, 0, W, H);
 
-  // Grid lines
   ctx.strokeStyle = '#e8e0d4';
   ctx.lineWidth = 0.5;
   for (let i = 0; i <= 10; i += 2) {
@@ -1131,7 +1790,6 @@ function renderEnergyChart() {
     ctx.fillText(i, padL - 5, y + 3);
   }
 
-  // X axis labels
   ctx.fillStyle = '#8a9a92';
   ctx.font = '9px sans-serif';
   ctx.textAlign = 'center';
@@ -1142,7 +1800,6 @@ function renderEnergyChart() {
     }
   }
 
-  // Collect data points
   const points = [];
   for (let i = 0; i < 21; i++) {
     if (state.checkins[i]) {
@@ -1162,7 +1819,6 @@ function renderEnergyChart() {
     return;
   }
 
-  // Fill area
   ctx.beginPath();
   ctx.moveTo(points[0].x, padT + chartH);
   points.forEach(p => ctx.lineTo(p.x, p.y));
@@ -1174,7 +1830,6 @@ function renderEnergyChart() {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // Line
   ctx.beginPath();
   ctx.strokeStyle = '#3a6b5c';
   ctx.lineWidth = 2;
@@ -1185,7 +1840,6 @@ function renderEnergyChart() {
   });
   ctx.stroke();
 
-  // Dots
   points.forEach(p => {
     ctx.beginPath();
     ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
@@ -1205,14 +1859,45 @@ function renderProfile() {
   document.getElementById('p-days').textContent = completedCount;
   updateCheckinStreak();
   document.getElementById('p-streak').textContent = state.streak;
-  document.getElementById('profile-name').textContent = state.userName;
 
-  // Level
-  let level = '初窥门径';
-  if (completedCount >= 21) level = '得道高人';
-  else if (completedCount >= 14) level = '融会贯通';
-  else if (completedCount >= 7) level = '渐入佳境';
-  document.getElementById('profile-level').textContent = level;
+  const avatarEl = document.getElementById('profile-avatar');
+  const nameEl = document.getElementById('profile-name');
+  const levelEl = document.getElementById('profile-level');
+  const hintEl = document.getElementById('profile-login-hint');
+
+  if (currentUser) {
+    // Logged in
+    avatarEl.className = 'avatar';
+    avatarEl.textContent = currentUser[0];
+    avatarEl.style.cssText = '';
+    nameEl.textContent = currentUser;
+    hintEl.style.display = 'none';
+
+    // Level
+    let level = '初窥门径';
+    if (completedCount >= 21) level = '得道高人';
+    else if (completedCount >= 14) level = '融会贯通';
+    else if (completedCount >= 7) level = '渐入佳境';
+
+    // Add exam-based level info
+    const examCount = Object.keys(state.examScores).filter(k => state.examScores[k] >= 60).length;
+    if (examCount > 0) {
+      level += ' · 已通过' + examCount + '门自砺';
+    }
+    levelEl.textContent = level;
+
+    // Logout button
+    document.getElementById('profile-logout-area').innerHTML = '<button class="btn-logout" onclick="doLogout()">合卷离席</button>';
+  } else {
+    // Not logged in
+    avatarEl.className = 'avatar default-avatar';
+    avatarEl.textContent = '';
+    avatarEl.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="12" r="6" fill="rgba(255,255,255,0.6)"/><ellipse cx="16" cy="28" rx="11" ry="8" fill="rgba(255,255,255,0.4)"/></svg>';
+    nameEl.textContent = '未启卷';
+    levelEl.textContent = '';
+    hintEl.style.display = 'block';
+    document.getElementById('profile-logout-area').innerHTML = '';
+  }
 
   renderBadges();
 }
@@ -1228,6 +1913,9 @@ const BADGE_DEFS = [
   { id: 'energy100', name: '内力深厚', desc: '累计能量100+', icon: '🔥', check: s => s.totalEnergy >= 100 },
   { id: 'diary3', name: '善于反思', desc: '写3篇日记', icon: '📝', check: s => s.diaries.length >= 3 },
   { id: 'perfect10', name: '巅峰状态', desc: '能量值达到10', icon: '💎', check: s => Object.values(s.checkins).some(c => c.energy === 10) },
+  { id: 'exam1', name: '初试锋芒', desc: '通过首门自砺', icon: '⚔️', check: s => Object.values(s.examScores || {}).some(v => v >= 60) },
+  { id: 'exam7', name: '学贯七课', desc: '通过全部7门自砺', icon: '🎓', check: s => { const es = s.examScores || {}; return [1,2,3,4,5,6,7].every(d => es[d] >= 60); } },
+  { id: 'dengfeng', name: '登峰造极', desc: '任意一门获100分', icon: '👑', check: s => Object.values(s.examScores || {}).some(v => v === 100) },
 ];
 
 function checkBadges() {
@@ -1244,17 +1932,15 @@ function renderBadges() {
   let html = '';
   BADGE_DEFS.forEach(b => {
     const unlocked = state.badges[b.id];
-    html += `<div class="badge-item ${unlocked ? '' : 'locked'}">
-      <div class="badge-icon">${b.icon}</div>
-      <div class="badge-name">${b.name}</div>
-      <div class="badge-desc">${b.desc}</div>
-    </div>`;
+    html += '<div class="badge-item ' + (unlocked ? '' : 'locked') + '">' +
+      '<div class="badge-icon">' + b.icon + '</div>' +
+      '<div class="badge-name">' + b.name + '</div>' +
+      '<div class="badge-desc">' + b.desc + '</div></div>';
   });
   grid.innerHTML = html;
 }
 
 function switchProfileTab(tab, el) {
-  // Update sub-tabs
   el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 
@@ -1278,15 +1964,12 @@ function renderProfileCheckin() {
     const c = state.checkins[i];
     const isToday = i === state.currentDay - 1;
     let cls = c ? 'checked' : (isToday ? 'today' : (i > state.currentDay - 1 ? 'future' : ''));
-    calHtml += `<div class="cal-day ${cls}">${i + 1}</div>`;
+    calHtml += '<div class="cal-day ' + cls + '">' + (i + 1) + '</div>';
   }
-  container.innerHTML = `
-    <div style="margin:16px 20px;text-align:center;padding:20px;background:linear-gradient(135deg,var(--ink),var(--moss));border-radius:16px;color:#fff;">
-      <div style="font-size:48px;font-weight:700;color:var(--gold);">${completedCount}</div>
-      <div style="font-size:13px;opacity:.7;">累计打卡天数</div>
-    </div>
-    <div class="calendar-grid"><div class="calendar-title">21天打卡日历</div><div class="calendar-days">${calHtml}</div></div>
-  `;
+  container.innerHTML = '<div style="margin:16px 20px;text-align:center;padding:20px;background:linear-gradient(135deg,var(--ink),var(--moss));border-radius:16px;color:#fff;">' +
+    '<div style="font-size:48px;font-weight:700;color:var(--gold);">' + completedCount + '</div>' +
+    '<div style="font-size:13px;opacity:.7;">累计打卡天数</div></div>' +
+    '<div class="calendar-grid"><div class="calendar-title">21天打卡日历</div><div class="calendar-days">' + calHtml + '</div></div>';
 }
 
 // ==================== COMMUNITY ====================
@@ -1302,8 +1985,128 @@ for (let i = 0; i < 50; i++) {
     checked: Math.random() > 0.3
   });
 }
-// Sort by energy desc for leaderboard
 const LEADERBOARD = [...MOCK_MEMBERS].filter(m => m.checked).sort((a, b) => b.energy - a.energy);
+
+// ==================== KNOWLEDGE RANKING MOCK DATA ====================
+function generateMockKnowledgeUsers() {
+  const mockUsers = [];
+  const mockNames = ['张静心','李明道','王清风','刘若水','陈无为','杨守拙','赵知行','黄善居','周致远','吴怀柔',
+    '徐悟空','孙慧能','马一心','胡正念','朱素朴','高归真','林养心','何得道','郭通达','罗自在'];
+
+  for (let i = 0; i < mockNames.length; i++) {
+    const numCourses = Math.floor(Math.random() * 7) + 1; // 1-7 courses completed
+    const courseScores = {};
+    const courseDays = [1,2,3,4,5,6,7].sort(() => Math.random()-0.5).slice(0, numCourses);
+    courseDays.forEach(d => {
+      // Generate a score: weighted towards higher scores
+      const r = Math.random();
+      let score;
+      if (r < 0.1) score = Math.floor(Math.random()*10) + 60; // 60-69
+      else if (r < 0.3) score = Math.floor(Math.random()*10) + 70; // 70-79
+      else if (r < 0.6) score = Math.floor(Math.random()*10) + 80; // 80-89
+      else if (r < 0.9) score = Math.floor(Math.random()*10) + 90; // 90-99
+      else score = 100;
+      courseScores[d] = score;
+    });
+
+    mockUsers.push({
+      name: mockNames[i],
+      examScores: courseScores,
+      isMe: false
+    });
+  }
+  return mockUsers;
+}
+
+function calcKnowledgeScore(examScores) {
+  let total = 0;
+  Object.keys(examScores).forEach(k => {
+    const score = examScores[k];
+    if (score >= 60) {
+      total += 10; // base
+      const rank = getRank(score);
+      if (rank) {
+        if (rank.name === '蒙学') total += 1;
+        else if (rank.name === '修业') total += 2;
+        else if (rank.name === '明辨') total += 3;
+        else if (rank.name === '致知') total += 4;
+        else if (rank.name === '登峰') total += 5;
+      }
+    }
+  });
+  return total;
+}
+
+// Persist mock users to avoid regenerating
+let mockKnowledgeUsers = null;
+function getMockKnowledgeUsers() {
+  if (!mockKnowledgeUsers) {
+    const saved = localStorage.getItem('zhenzhicamp_mock_knowledge');
+    if (saved) {
+      try { mockKnowledgeUsers = JSON.parse(saved); } catch(e) { mockKnowledgeUsers = null; }
+    }
+    if (!mockKnowledgeUsers) {
+      mockKnowledgeUsers = generateMockKnowledgeUsers();
+      localStorage.setItem('zhenzhicamp_mock_knowledge', JSON.stringify(mockKnowledgeUsers));
+    }
+  }
+  return mockKnowledgeUsers;
+}
+
+function renderKnowledgeLeaderboard() {
+  const container = document.getElementById('knowledge-leaderboard');
+  const mockUsers = getMockKnowledgeUsers();
+
+  // Add current user
+  const allUsers = [...mockUsers];
+  const myName = currentUser || state.userName || '修炼者';
+  const myExamScores = state.examScores || {};
+  allUsers.push({ name: myName, examScores: myExamScores, isMe: true });
+
+  // Calculate scores and sort
+  const ranked = allUsers.map(u => ({
+    ...u,
+    knowledgeScore: calcKnowledgeScore(u.examScores),
+    courseCount: Object.keys(u.examScores).filter(k => u.examScores[k] >= 60).length
+  })).sort((a, b) => {
+    if (b.knowledgeScore !== a.knowledgeScore) return b.knowledgeScore - a.knowledgeScore;
+    return b.courseCount - a.courseCount;
+  });
+
+  let html = '';
+  ranked.forEach((u, i) => {
+    const rankNum = i + 1;
+    const rankCls = i === 0 ? 'gold' : (i === 1 ? 'silver' : (i === 2 ? 'bronze' : ''));
+    const rankText = i < 3 ? ['🥇','🥈','🥉'][i] : rankNum;
+
+    // Build mini badges
+    let badgesHtml = '';
+    Object.keys(u.examScores).sort().forEach(d => {
+      const score = u.examScores[d];
+      if (score >= 60) {
+        const rank = getRank(score);
+        if (rank) {
+          badgesHtml += '<span class="mini-badge ' + rank.cls + '">D' + d + ' ' + rank.name + '</span>';
+        }
+      }
+    });
+
+    html += '<div class="knowledge-lb-item ' + (u.isMe ? 'is-me' : '') + '" style="' + (u.isMe ? 'background:rgba(201,169,110,.08);border-radius:8px;padding:10px 6px;margin:-2px -6px;' : '') + '">' +
+      '<div class="lb-rank ' + rankCls + '" style="width:28px;text-align:center;font-weight:700;">' + rankText + '</div>' +
+      '<div class="lb-avatar">' + u.name[0] + '</div>' +
+      '<div class="knowledge-lb-info">' +
+        '<div class="knowledge-lb-name">' + u.name + (u.isMe ? ' <span style="font-size:10px;color:var(--gold);">(我)</span>' : '') + '</div>' +
+        '<div class="knowledge-lb-badges">' + (badgesHtml || '<span style="font-size:10px;color:var(--gray);">暂无成绩</span>') + '</div>' +
+      '</div>' +
+      '<div style="text-align:right;">' +
+        '<div class="knowledge-score">' + u.knowledgeScore + '</div>' +
+        '<div class="knowledge-score-label">' + u.courseCount + '门课程</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  container.innerHTML = html;
+}
 
 const MOCK_CHATS = [
   { name: '静心老师', avatar: '🧘', isAssistant: true, text: '各位同修早上好！今天是我们修炼营的第12天，坚持到现在的每一位都非常了不起。今天的课程是关于"柔软的力量"，希望大家在工作中找到一个场景来实践。', time: '08:30' },
@@ -1320,6 +2123,7 @@ function renderCommunity() {
   renderLeaderboard();
   renderChatMessages();
   renderMembers();
+  renderKnowledgeLeaderboard();
 }
 
 function renderLeaderboard() {
@@ -1329,12 +2133,11 @@ function renderLeaderboard() {
   top10.forEach((m, i) => {
     const rankCls = i === 0 ? 'gold' : (i === 1 ? 'silver' : (i === 2 ? 'bronze' : ''));
     const rankText = i < 3 ? ['🥇','🥈','🥉'][i] : (i + 1);
-    html += `<div class="lb-item">
-      <div class="lb-rank ${rankCls}">${rankText}</div>
-      <div class="lb-avatar">${m.name[0]}</div>
-      <div class="lb-name">${m.name}</div>
-      <div class="lb-score">${m.energy} 能量</div>
-    </div>`;
+    html += '<div class="lb-item">' +
+      '<div class="lb-rank ' + rankCls + '">' + rankText + '</div>' +
+      '<div class="lb-avatar">' + m.name[0] + '</div>' +
+      '<div class="lb-name">' + m.name + '</div>' +
+      '<div class="lb-score">' + m.energy + ' 能量</div></div>';
   });
   list.innerHTML = html;
 }
@@ -1344,14 +2147,13 @@ function renderChatMessages() {
   const allMsgs = [...MOCK_CHATS, ...state.chatMessages];
   let html = '';
   allMsgs.forEach(m => {
-    html += `<div class="chat-msg">
-      <div class="chat-avatar ${m.isAssistant ? 'assistant' : ''}">${m.avatar || m.name[0]}</div>
-      <div class="chat-bubble">
-        <div class="chat-name">${m.name}${m.isAssistant ? ' · 助教' : ''}</div>
-        <div class="chat-text">${m.text}</div>
-        <div class="chat-time">${m.time || ''}</div>
-      </div>
-    </div>`;
+    html += '<div class="chat-msg">' +
+      '<div class="chat-avatar ' + (m.isAssistant ? 'assistant' : '') + '">' + (m.avatar || m.name[0]) + '</div>' +
+      '<div class="chat-bubble">' +
+        '<div class="chat-name">' + m.name + (m.isAssistant ? ' · 助教' : '') + '</div>' +
+        '<div class="chat-text">' + m.text + '</div>' +
+        '<div class="chat-time">' + (m.time || '') + '</div>' +
+      '</div></div>';
   });
   container.innerHTML = html;
   container.scrollTop = container.scrollHeight;
@@ -1362,9 +2164,10 @@ function sendChat() {
   const text = input.value.trim();
   if (!text) return;
 
+  const senderName = currentUser || state.userName || '修炼者';
   state.chatMessages.push({
-    name: state.userName,
-    avatar: '🧑',
+    name: senderName,
+    avatar: '',
     text: text,
     time: new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'})
   });
@@ -1377,10 +2180,8 @@ function renderMembers() {
   const grid = document.getElementById('members-grid');
   let html = '';
   MOCK_MEMBERS.forEach(m => {
-    html += `<div class="member-chip">
-      <div class="member-chip-avatar">${m.name[0]}</div>
-      ${m.name}
-    </div>`;
+    html += '<div class="member-chip">' +
+      '<div class="member-chip-avatar">' + m.name[0] + '</div>' + m.name + '</div>';
   });
   grid.innerHTML = html;
 }
@@ -1388,9 +2189,10 @@ function renderMembers() {
 function switchCommunityTab(tab, el) {
   el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  ['rank','chat','members'].forEach(t => {
+  ['rank','knowledge','chat','members'].forEach(t => {
     document.getElementById('community-' + t).style.display = (t === tab) ? 'block' : 'none';
   });
+  if (tab === 'knowledge') renderKnowledgeLeaderboard();
 }
 
 // ==================== MEDITATION ====================
@@ -1407,36 +2209,27 @@ function renderProfileMeditation() {
 
   let listHtml = '';
   meditations.forEach((m, i) => {
-    listHtml += `<div class="meditation-item" onclick="playMeditation(${i})">
-      <div class="med-icon" style="background:${m.color}">${m.icon}</div>
-      <div class="med-info"><div class="med-name">${m.name}</div><div class="med-dur">${m.dur}</div></div>
-      <span style="color:var(--gray)">▶</span>
-    </div>`;
+    listHtml += '<div class="meditation-item" onclick="playMeditation(' + i + ')">' +
+      '<div class="med-icon" style="background:' + m.color + '">' + m.icon + '</div>' +
+      '<div class="med-info"><div class="med-name">' + m.name + '</div><div class="med-dur">' + m.dur + '</div></div>' +
+      '<span style="color:var(--gray)">▶</span></div>';
   });
 
-  container.innerHTML = `
-    <div class="meditation-visual">
-      <div class="ripple"></div><div class="ripple"></div><div class="ripple"></div><div class="ripple"></div>
-      <div class="breath-circle" id="breath-text">吸气...</div>
-    </div>
-    <div class="player-controls">
-      <div class="player-title" id="med-player-title">选择一个冥想开始</div>
-      <div class="player-subtitle" id="med-player-sub">放松身心，回归当下</div>
-      <div class="player-progress" onclick="seekMeditation(event)">
-        <div class="player-progress-fill" id="med-progress" style="width:0%"></div>
-      </div>
-      <div class="player-time">
-        <span id="med-time-cur">0:00</span>
-        <span id="med-time-total">0:00</span>
-      </div>
-      <div class="player-btns">
-        <button class="player-btn" onclick="medSeek(-15)">⏪</button>
-        <button class="player-btn play" id="med-play-btn" onclick="toggleMeditation()">▶</button>
-        <button class="player-btn" onclick="medSeek(15)">⏩</button>
-      </div>
-    </div>
-    <div class="meditation-list">${listHtml}</div>
-  `;
+  container.innerHTML = '<div class="meditation-visual">' +
+    '<div class="ripple"></div><div class="ripple"></div><div class="ripple"></div><div class="ripple"></div>' +
+    '<div class="breath-circle" id="breath-text">吸气...</div></div>' +
+    '<div class="player-controls">' +
+      '<div class="player-title" id="med-player-title">选择一个冥想开始</div>' +
+      '<div class="player-subtitle" id="med-player-sub">放松身心，回归当下</div>' +
+      '<div class="player-progress" onclick="seekMeditation(event)">' +
+        '<div class="player-progress-fill" id="med-progress" style="width:0%"></div></div>' +
+      '<div class="player-time">' +
+        '<span id="med-time-cur">0:00</span><span id="med-time-total">0:00</span></div>' +
+      '<div class="player-btns">' +
+        '<button class="player-btn" onclick="medSeek(-15)">⏪</button>' +
+        '<button class="player-btn play" id="med-play-btn" onclick="toggleMeditation()">▶</button>' +
+        '<button class="player-btn" onclick="medSeek(15)">⏩</button></div></div>' +
+    '<div class="meditation-list">' + listHtml + '</div>';
 
   startBreathAnimation();
 }
@@ -1525,89 +2318,47 @@ function startBreathAnimation() {
 // ==================== MEMBERSHIP ====================
 function renderProfileMembership() {
   const container = document.getElementById('profile-membership');
-  container.innerHTML = `
-    <div class="membership-hero">
-      <h2>开启你的修炼之旅</h2>
-      <p>选择适合你的方案，获得系统性的成长指导</p>
-    </div>
-    <div class="pricing-cards">
-      <div class="pricing-card">
-        <div class="pricing-name">7天体验营</div>
-        <div class="pricing-price">¥99 <span>/人</span></div>
-        <ul class="pricing-features">
-          <li>7天基础课程</li>
-          <li>每日打卡追踪</li>
-          <li>社群交流</li>
-          <li>1次助教答疑</li>
-        </ul>
-        <button class="btn-pricing outline" onclick="showToast('体验营报名功能即将上线')">立即报名</button>
-      </div>
-      <div class="pricing-card featured">
-        <div class="pricing-name">21天标准训练营</div>
-        <div class="pricing-price">¥399 <span>/人</span></div>
-        <ul class="pricing-features">
-          <li>完整21天课程体系</li>
-          <li>每日打卡与能量追踪</li>
-          <li>50人小班社群</li>
-          <li>助教全程陪伴</li>
-          <li>冥想音频全解锁</li>
-          <li>专属成长报告</li>
-        </ul>
-        <button class="btn-pricing primary" onclick="showToast('训练营报名功能即将上线')">立即报名</button>
-      </div>
-      <div class="pricing-card">
-        <div class="pricing-name">年度会员</div>
-        <div class="pricing-price">¥1299 <span>/年</span></div>
-        <ul class="pricing-features">
-          <li>全部训练营无限参加</li>
-          <li>独家进阶课程</li>
-          <li>优先匹配助教</li>
-          <li>线下活动优先名额</li>
-          <li>专属1v1成长规划</li>
-        </ul>
-        <button class="btn-pricing outline" onclick="showToast('年度会员开通功能即将上线')">开通会员</button>
-      </div>
-      <div class="pricing-card">
-        <div class="pricing-name">1v1 咨询</div>
-        <div class="pricing-price">¥599 <span>/次</span></div>
-        <ul class="pricing-features">
-          <li>60分钟深度对话</li>
-          <li>资深导师一对一</li>
-          <li>定制化修炼方案</li>
-          <li>后续跟进指导</li>
-        </ul>
-        <button class="btn-pricing outline" onclick="showToast('咨询预约功能即将上线')">预约咨询</button>
-      </div>
-    </div>
-    <div style="padding:0 20px 20px;">
-      <div class="section-title">企业版服务</div>
-      <div style="background:#fff;border-radius:var(--radius);padding:20px;box-shadow:0 2px 12px var(--shadow);">
-        <p style="font-size:14px;line-height:1.8;color:#555;margin-bottom:16px;">
-          为企业团队提供定制化的心理健康与团队效能提升解决方案。帮助员工缓解职场焦虑，提升团队凝聚力与创造力。
-        </p>
-        <ul class="pricing-features">
-          <li>定制化企业课程内容</li>
-          <li>团队专属修炼营</li>
-          <li>员工心理健康数据报告</li>
-          <li>线下工作坊 & 团建活动</li>
-          <li>企业文化融合方案</li>
-        </ul>
-        <button class="btn-pricing primary" style="margin-top:16px;" onclick="showToast('企业版咨询请联系 enterprise@zhenzhicamp.com')">联系商务</button>
-      </div>
-    </div>
-    <div class="compare-table">
-      <table>
-        <tr><th>权益</th><th>体验营</th><th>标准营</th><th>年度会员</th></tr>
-        <tr><td>课程天数</td><td>7天</td><td>21天</td><td>无限</td></tr>
-        <tr><td>社群服务</td><td>✓</td><td>✓</td><td>✓ VIP群</td></tr>
-        <tr><td>助教答疑</td><td>1次</td><td>不限</td><td>不限</td></tr>
-        <tr><td>冥想音频</td><td>3个</td><td>全部</td><td>全部+独家</td></tr>
-        <tr><td>成长报告</td><td>✗</td><td>✓</td><td>✓ 季度</td></tr>
-        <tr><td>线下活动</td><td>✗</td><td>✗</td><td>✓ 优先</td></tr>
-        <tr><td>1v1咨询</td><td>✗</td><td>✗</td><td>1次/季</td></tr>
-      </table>
-    </div>
-  `;
+  container.innerHTML = '<div class="membership-hero">' +
+    '<h2>开启你的修炼之旅</h2>' +
+    '<p>选择适合你的方案，获得系统性的成长指导</p></div>' +
+    '<div class="pricing-cards">' +
+      '<div class="pricing-card">' +
+        '<div class="pricing-name">7天体验营</div>' +
+        '<div class="pricing-price">¥99 <span>/人</span></div>' +
+        '<ul class="pricing-features"><li>7天基础课程</li><li>每日打卡追踪</li><li>社群交流</li><li>1次助教答疑</li></ul>' +
+        '<button class="btn-pricing outline" onclick="showToast(\'体验营报名功能即将上线\')">立即报名</button></div>' +
+      '<div class="pricing-card featured">' +
+        '<div class="pricing-name">21天标准训练营</div>' +
+        '<div class="pricing-price">¥399 <span>/人</span></div>' +
+        '<ul class="pricing-features"><li>完整21天课程体系</li><li>每日打卡与能量追踪</li><li>50人小班社群</li><li>助教全程陪伴</li><li>冥想音频全解锁</li><li>专属成长报告</li></ul>' +
+        '<button class="btn-pricing primary" onclick="showToast(\'训练营报名功能即将上线\')">立即报名</button></div>' +
+      '<div class="pricing-card">' +
+        '<div class="pricing-name">年度会员</div>' +
+        '<div class="pricing-price">¥1299 <span>/年</span></div>' +
+        '<ul class="pricing-features"><li>全部训练营无限参加</li><li>独家进阶课程</li><li>优先匹配助教</li><li>线下活动优先名额</li><li>专属1v1成长规划</li></ul>' +
+        '<button class="btn-pricing outline" onclick="showToast(\'年度会员开通功能即将上线\')">开通会员</button></div>' +
+      '<div class="pricing-card">' +
+        '<div class="pricing-name">1v1 咨询</div>' +
+        '<div class="pricing-price">¥599 <span>/次</span></div>' +
+        '<ul class="pricing-features"><li>60分钟深度对话</li><li>资深导师一对一</li><li>定制化修炼方案</li><li>后续跟进指导</li></ul>' +
+        '<button class="btn-pricing outline" onclick="showToast(\'咨询预约功能即将上线\')">预约咨询</button></div>' +
+    '</div>' +
+    '<div style="padding:0 20px 20px;">' +
+      '<div class="section-title">企业版服务</div>' +
+      '<div style="background:#fff;border-radius:var(--radius);padding:20px;box-shadow:0 2px 12px var(--shadow);">' +
+        '<p style="font-size:14px;line-height:1.8;color:#555;margin-bottom:16px;">为企业团队提供定制化的心理健康与团队效能提升解决方案。帮助员工缓解职场焦虑，提升团队凝聚力与创造力。</p>' +
+        '<ul class="pricing-features"><li>定制化企业课程内容</li><li>团队专属修炼营</li><li>员工心理健康数据报告</li><li>线下工作坊 & 团建活动</li><li>企业文化融合方案</li></ul>' +
+        '<button class="btn-pricing primary" style="margin-top:16px;" onclick="showToast(\'企业版咨询请联系 enterprise@zhenzhicamp.com\')">联系商务</button></div></div>' +
+    '<div class="compare-table"><table>' +
+      '<tr><th>权益</th><th>体验营</th><th>标准营</th><th>年度会员</th></tr>' +
+      '<tr><td>课程天数</td><td>7天</td><td>21天</td><td>无限</td></tr>' +
+      '<tr><td>社群服务</td><td>✓</td><td>✓</td><td>✓ VIP群</td></tr>' +
+      '<tr><td>助教答疑</td><td>1次</td><td>不限</td><td>不限</td></tr>' +
+      '<tr><td>冥想音频</td><td>3个</td><td>全部</td><td>全部+独家</td></tr>' +
+      '<tr><td>成长报告</td><td>✗</td><td>✓</td><td>✓ 季度</td></tr>' +
+      '<tr><td>线下活动</td><td>✗</td><td>✗</td><td>✓ 优先</td></tr>' +
+      '<tr><td>1v1咨询</td><td>✗</td><td>✗</td><td>1次/季</td></tr>' +
+    '</table></div>';
 }
 
 // ==================== DIARY ====================
@@ -1618,20 +2369,16 @@ function renderProfileDiary() {
     listHtml = '<div style="text-align:center;padding:40px 20px;color:var(--gray);">还没有日记，开始记录你的修炼感悟吧</div>';
   } else {
     state.diaries.slice().reverse().forEach((d, i) => {
-      listHtml += `<div class="diary-card" onclick="viewDiary(${state.diaries.length - 1 - i})">
-        <div class="diary-date">${d.date}</div>
-        <div class="diary-mood">心情：${d.mood} · 能量：${d.energy}/10</div>
-        <div class="diary-preview">${d.event || d.insight || '点击查看详情...'}</div>
-      </div>`;
+      listHtml += '<div class="diary-card" onclick="viewDiary(' + (state.diaries.length - 1 - i) + ')">' +
+        '<div class="diary-date">' + d.date + '</div>' +
+        '<div class="diary-mood">心情：' + d.mood + ' · 能量：' + d.energy + '/10</div>' +
+        '<div class="diary-preview">' + (d.event || d.insight || '点击查看详情...') + '</div></div>';
     });
   }
 
-  container.innerHTML = `
-    <div class="diary-actions">
-      <button class="btn-new-diary" onclick="openNewDiary()">📝 写今日日记</button>
-    </div>
-    <div class="diary-list">${listHtml}</div>
-  `;
+  container.innerHTML = '<div class="diary-actions">' +
+    '<button class="btn-new-diary" onclick="openNewDiary()">📝 写今日日记</button></div>' +
+    '<div class="diary-list">' + listHtml + '</div>';
 }
 
 function openNewDiary() {
@@ -1639,33 +2386,20 @@ function openNewDiary() {
   const moods = ['😊 愉悦','😌 平静','😐 一般','😔 低落','😤 烦躁','🤔 迷茫','💪 振奋','🙏 感恩'];
   let moodHtml = '';
   moods.forEach(m => {
-    moodHtml += `<div class="diary-mood-option" onclick="this.parentElement.querySelectorAll('.diary-mood-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')" data-mood="${m}">${m}</div>`;
+    moodHtml += '<div class="diary-mood-option" onclick="this.parentElement.querySelectorAll(\'.diary-mood-option\').forEach(x=>x.classList.remove(\'selected\'));this.classList.add(\'selected\')" data-mood="' + m + '">' + m + '</div>';
   });
 
-  document.getElementById('diary-form-content').innerHTML = `
-    <div class="diary-field">
-      <label>今日心情</label>
-      <div class="diary-mood-select">${moodHtml}</div>
-    </div>
-    <div class="diary-field">
-      <label>今日能量值 (1-10)</label>
-      <input type="range" class="energy-slider" id="diary-energy" min="1" max="10" value="5" style="width:100%" oninput="document.getElementById('diary-energy-val').textContent=this.value">
-      <div style="text-align:center;font-size:24px;color:var(--moss);font-weight:700;margin:8px 0" id="diary-energy-val">5</div>
-    </div>
-    <div class="diary-field">
-      <label>🔑 今日关键事件</label>
-      <textarea id="diary-event" placeholder="今天发生了什么重要的事？"></textarea>
-    </div>
-    <div class="diary-field">
-      <label>📜 道德经感悟</label>
-      <textarea id="diary-insight" placeholder="今天的课程给你带来了什么启发？"></textarea>
-    </div>
-    <div class="diary-field">
-      <label>🎯 明日计划</label>
-      <textarea id="diary-plan" placeholder="明天想尝试什么实践？"></textarea>
-    </div>
-    <button class="btn-save-diary" onclick="saveDiary()">保存日记</button>
-  `;
+  document.getElementById('diary-form-content').innerHTML = '<div class="diary-field">' +
+    '<label>今日心情</label>' +
+    '<div class="diary-mood-select">' + moodHtml + '</div></div>' +
+    '<div class="diary-field">' +
+      '<label>今日能量值 (1-10)</label>' +
+      '<input type="range" class="energy-slider" id="diary-energy" min="1" max="10" value="5" style="width:100%" oninput="document.getElementById(\'diary-energy-val\').textContent=this.value">' +
+      '<div style="text-align:center;font-size:24px;color:var(--moss);font-weight:700;margin:8px 0" id="diary-energy-val">5</div></div>' +
+    '<div class="diary-field"><label>🔑 今日关键事件</label><textarea id="diary-event" placeholder="今天发生了什么重要的事？"></textarea></div>' +
+    '<div class="diary-field"><label>📜 道德经感悟</label><textarea id="diary-insight" placeholder="今天的课程给你带来了什么启发？"></textarea></div>' +
+    '<div class="diary-field"><label>🎯 明日计划</label><textarea id="diary-plan" placeholder="明天想尝试什么实践？"></textarea></div>' +
+    '<button class="btn-save-diary" onclick="saveDiary()">保存日记</button>';
 
   modal.style.display = 'flex';
   requestAnimationFrame(() => modal.classList.add('show'));
@@ -1675,13 +2409,13 @@ function saveDiary() {
   const moodEl = document.querySelector('#diary-form-content .diary-mood-option.selected');
   const mood = moodEl ? moodEl.dataset.mood : '😊 愉悦';
   const energy = document.getElementById('diary-energy').value;
-  const event = document.getElementById('diary-event').value;
+  const event_text = document.getElementById('diary-event').value;
   const insight = document.getElementById('diary-insight').value;
   const plan = document.getElementById('diary-plan').value;
 
   state.diaries.push({
     date: new Date().toLocaleDateString('zh-CN'),
-    mood, energy, event, insight, plan
+    mood: mood, energy: energy, event: event_text, insight: insight, plan: plan
   });
   checkBadges();
   saveState();
@@ -1694,18 +2428,17 @@ function viewDiary(idx) {
   const d = state.diaries[idx];
   if (!d) return;
   const modal = document.getElementById('diary-modal');
-  document.getElementById('diary-form-content').innerHTML = `
-    <div style="padding:4px 0;">
-      <div style="font-size:14px;color:var(--gold);margin-bottom:8px;">${d.date}</div>
-      <div style="margin-bottom:16px;">
-        <span style="font-size:13px;color:var(--gray);">心情：</span>${d.mood}
-        <span style="font-size:13px;color:var(--gray);margin-left:16px;">能量：</span>${d.energy}/10
-      </div>
-      ${d.event ? `<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">🔑 关键事件</div><div style="font-size:13px;line-height:1.7;color:#555;">${d.event}</div></div>` : ''}
-      ${d.insight ? `<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">📜 道德经感悟</div><div style="font-size:13px;line-height:1.7;color:#555;">${d.insight}</div></div>` : ''}
-      ${d.plan ? `<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">🎯 明日计划</div><div style="font-size:13px;line-height:1.7;color:#555;">${d.plan}</div></div>` : ''}
-    </div>
-  `;
+  let html = '<div style="padding:4px 0;">' +
+    '<div style="font-size:14px;color:var(--gold);margin-bottom:8px;">' + d.date + '</div>' +
+    '<div style="margin-bottom:16px;">' +
+      '<span style="font-size:13px;color:var(--gray);">心情：</span>' + d.mood +
+      '<span style="font-size:13px;color:var(--gray);margin-left:16px;">能量：</span>' + d.energy + '/10</div>';
+  if (d.event) html += '<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">🔑 关键事件</div><div style="font-size:13px;line-height:1.7;color:#555;">' + d.event + '</div></div>';
+  if (d.insight) html += '<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">📜 道德经感悟</div><div style="font-size:13px;line-height:1.7;color:#555;">' + d.insight + '</div></div>';
+  if (d.plan) html += '<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">🎯 明日计划</div><div style="font-size:13px;line-height:1.7;color:#555;">' + d.plan + '</div></div>';
+  html += '</div>';
+
+  document.getElementById('diary-form-content').innerHTML = html;
   modal.style.display = 'flex';
   requestAnimationFrame(() => modal.classList.add('show'));
 }
@@ -1722,16 +2455,16 @@ function updateHomeDailyCard() {
   const card = document.getElementById('home-daily-card');
   const dayIdx = state.currentDay - 1;
   const c = COURSES[dayIdx] || COURSES[0];
-  card.innerHTML = `
-    <div class="daily-tag">DAY ${c.day}</div>
-    <div class="daily-title">${c.title}</div>
-    <div class="daily-quote">${c.theme}。${c.quote || ''}</div>
-    <button class="daily-btn" onclick="openCourseDetail(${dayIdx})">进入今日课程 →</button>
-  `;
+  card.innerHTML = '<div class="daily-tag">DAY ' + c.day + '</div>' +
+    '<div class="daily-title">' + c.title + '</div>' +
+    '<div class="daily-quote">' + c.theme + '。' + (c.quote || '') + '</div>' +
+    '<button class="daily-btn" onclick="openCourseDetail(' + dayIdx + ')">进入今日课程 →</button>';
 }
 
 // ==================== INIT ====================
 function init() {
+  initAuth();
+  loadState();
   updateHomeDailyCard();
 
   // Rotate daily quotes
@@ -1748,15 +2481,20 @@ function init() {
   document.getElementById('daily-quote-text').textContent = q.t;
   document.querySelector('.quote-src').textContent = '— ' + q.s;
 
-  // Enter key for chat
   document.getElementById('chat-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') sendChat();
   });
 
-  // Window resize for chart
+  document.getElementById('login-password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
   window.addEventListener('resize', () => {
     if (document.getElementById('page-checkin').classList.contains('active')) renderEnergyChart();
   });
+
+  // Render profile if that's initial state needed
+  renderProfile();
 }
 
 document.addEventListener('DOMContentLoaded', init);
