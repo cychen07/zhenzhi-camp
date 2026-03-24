@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>真值修炼营 — 道法自然，内心自在</title>
+<style>
+:root{
+  --ink:#2d4a3e;--gold:#c9a96e;--cream:#f5f0e8;--light:#faf7f2;
+  --moss:#3a6b5c;--deep:#1a332b;--gray:#8a9a92;--soft:#e8e0d4;
+  --red:#c45c4a;--badge:#d4a843;--shadow:rgba(45,74,62,.12);
+  --radius:12px;--transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Noto Serif SC',serif;
+  background:#e8e0d4;color:var(--ink);overflow-x:hidden;
+}
+.app-container{
+  max-width:430px;margin:0 auto;min-height:100vh;background:var(--light);
+  position:relative;overflow:hidden;
+  box-shadow:0 0 40px rgba(0,0,0,.1);
+}
+/* Pages */
+.page{display:none;padding-bottom:70px;min-height:100vh;opacity:0;transition:opacity .35s ease;}
+.page.active{display:block;opacity:1;}
+
+/* ===== BOTTOM TAB BAR ===== */
+.tab-bar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;height:64px;
+  background:rgba(250,247,242,.96);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-around;
+  border-top:1px solid var(--soft);z-index:100;
+}
+.tab-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-size:10px;color:var(--gray);cursor:pointer;transition:var(--transition);
+  padding:6px 12px;border-radius:8px;-webkit-tap-highlight-color:transparent;
+}
+.tab-item.active{color:var(--moss);}
+.tab-item svg{width:24px;height:24px;transition:var(--transition);}
+.tab-item.active svg{transform:scale(1.1);}
+.tab-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+
+/* ===== HOME PAGE ===== */
+.home-hero{
+  position:relative;height:420px;
+  background:linear-gradient(160deg,#1a332b 0%,#2d4a3e 40%,#3a6b5c 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.home-hero::before{
+  content:'道';position:absolute;font-size:280px;color:rgba(255,255,255,.03);
+  font-family:serif;top:-30px;right:-40px;
+}
+.home-hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(transparent,var(--light));
+}
+.hero-subtitle{color:rgba(255,255,255,.6);font-size:13px;letter-spacing:6px;margin-bottom:12px;}
+.hero-title{color:#fff;font-size:36px;font-weight:300;letter-spacing:8px;margin-bottom:8px;}
+.hero-en{color:var(--gold);font-size:11px;letter-spacing:3px;margin-bottom:24px;opacity:.8;}
+.hero-desc{color:rgba(255,255,255,.7);font-size:14px;text-align:center;line-height:1.8;padding:0 40px;margin-bottom:32px;}
+.btn-start{
+  background:linear-gradient(135deg,var(--gold),#d4a843);color:var(--deep);
+  border:none;padding:14px 48px;border-radius:30px;font-size:16px;
+  letter-spacing:4px;cursor:pointer;transition:var(--transition);
+  box-shadow:0 4px 20px rgba(201,169,110,.4);position:relative;z-index:2;
+}
+.btn-start:active{transform:scale(.96);}
+
+.home-stats{display:flex;justify-content:space-around;padding:24px 20px;gap:12px;}
+.stat-card{
+  flex:1;background:#fff;border-radius:var(--radius);padding:16px 8px;
+  text-align:center;box-shadow:0 2px 12px var(--shadow);
+}
+.stat-num{font-size:24px;color:var(--moss);font-weight:700;}
+.stat-label{font-size:11px;color:var(--gray);margin-top:4px;}
+
+.home-section{padding:0 20px;margin-bottom:24px;}
+.section-title{
+  font-size:18px;font-weight:600;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-title::before{content:'';width:3px;height:18px;background:var(--gold);border-radius:2px;}
+
+.daily-card{
+  background:linear-gradient(135deg,var(--ink),var(--moss));
+  border-radius:16px;padding:24px;color:#fff;position:relative;overflow:hidden;
+}
+.daily-card::after{
+  content:'☯';position:absolute;right:-10px;bottom:-10px;font-size:100px;opacity:.05;
+}
+.daily-tag{
+  display:inline-block;background:var(--gold);color:var(--deep);
+  font-size:11px;padding:3px 10px;border-radius:10px;margin-bottom:12px;
+}
+.daily-title{font-size:20px;margin-bottom:8px;font-weight:300;}
+.daily-quote{font-size:13px;opacity:.7;line-height:1.6;margin-bottom:16px;}
+.daily-btn{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  color:#fff;padding:10px 24px;border-radius:20px;font-size:13px;
+  cursor:pointer;transition:var(--transition);
+}
+.daily-btn:active{background:rgba(255,255,255,.25);}
+
+.quote-wall{
+  background:#fff;border-radius:var(--radius);padding:20px;
+  box-shadow:0 2px 12px var(--shadow);border-left:3px solid var(--gold);
+}
+.quote-text{font-size:15px;line-height:1.8;color:var(--ink);font-style:italic;}
+.quote-src{font-size:12px;color:var(--gray);margin-top:8px;text-align:right;}
+
+/* ===== COURSE PAGE ===== */
+.page-header{
+  padding:16px 20px 12px;background:var(--light);
+  position:sticky;top:0;z-index:10;
+  border-bottom:1px solid var(--soft);
+}
+.page-title{font-size:20px;font-weight:600;letter-spacing:2px;}
+.page-subtitle{font-size:12px;color:var(--gray);margin-top:2px;}
+
+.course-progress{
+  margin:16px 20px;background:#fff;border-radius:var(--radius);
+  padding:16px;box-shadow:0 2px 12px var(--shadow);
+}
+.progress-bar-wrap{
+  height:6px;background:var(--soft);border-radius:3px;margin-top:8px;overflow:hidden;
+}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--moss),var(--gold));border-radius:3px;transition:width .5s ease;}
+.progress-text{font-size:12px;color:var(--gray);display:flex;justify-content:space-between;}
+
+.course-list{padding:0 20px 20px;}
+.course-card{
+  background:#fff;border-radius:var(--radius);padding:16px;
+  margin-bottom:12px;box-shadow:0 2px 12px var(--shadow);
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;
+}
+.course-card:active{transform:scale(.98);}
+.course-card.locked{opacity:.5;pointer-events:none;}
+.course-card.completed{border-left:3px solid var(--moss);}
+.course-card.current{border-left:3px solid var(--gold);}
+.course-day{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;flex-shrink:0;
+}
+.course-card.completed .course-day{background:var(--moss);color:#fff;}
+.course-card.current .course-day{background:var(--gold);color:var(--deep);}
+.course-card.locked .course-day{background:var(--soft);color:var(--gray);}
+.course-info{flex:1;min-width:0;}
+.course-name{font-size:14px;font-weight:600;margin-bottom:4px;}
+.course-desc{font-size:12px;color:var(--gray);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.course-status{font-size:11px;padding:3px 8px;border-radius:8px;flex-shrink:0;}
+.course-card.completed .course-status{background:#e8f5e9;color:#2e7d32;}
+.course-card.current .course-status{background:#fff8e1;color:#f57f17;}
+.course-card.locked .course-status{background:var(--soft);color:var(--gray);}
+
+/* Course Detail Modal */
+.modal-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.5);z-index:200;
+  display:none;align-items:flex-end;justify-content:center;
+  opacity:0;transition:opacity .3s ease;
+}
+.modal-overlay.show{display:flex;opacity:1;}
+.modal-content{
+  width:100%;max-width:430px;max-height:85vh;
+  background:var(--light);border-radius:20px 20px 0 0;
+  overflow-y:auto;transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  padding:0 0 90px 0;
+}
+.modal-overlay.show .modal-content{transform:translateY(0);}
+.modal-handle{
+  width:36px;height:4px;background:var(--soft);border-radius:2px;
+  margin:12px auto;
+}
+.modal-header{
+  padding:8px 20px 16px;border-bottom:1px solid var(--soft);
+}
+.modal-day{font-size:12px;color:var(--gold);font-weight:600;}
+.modal-title{font-size:20px;font-weight:600;margin-top:4px;}
+.modal-body{padding:20px;}
+.modal-section{margin-bottom:24px;}
+.modal-section-title{
+  font-size:13px;color:var(--gold);font-weight:600;
+  letter-spacing:2px;margin-bottom:12px;
+  display:flex;align-items:center;gap:6px;
+}
+.original-text{
+  background:linear-gradient(135deg,var(--ink),var(--moss));
+  color:#fff;padding:20px;border-radius:var(--radius);
+  font-size:16px;line-height:2;letter-spacing:1px;
+  font-family:'Noto Serif SC',serif;
+}
+.modern-reading{
+  font-size:14px;line-height:1.9;color:#444;
+  background:#fff;padding:16px;border-radius:var(--radius);
+  box-shadow:0 1px 8px var(--shadow);
+}
+.practice-task{
+  background:linear-gradient(135deg,#fff8e1,#fff3cc);
+  padding:16px;border-radius:var(--radius);
+  border-left:3px solid var(--gold);
+}
+.practice-task h4{font-size:14px;margin-bottom:8px;color:var(--deep);}
+.practice-task p{font-size:13px;line-height:1.7;color:#555;}
+.energy-quote{
+  text-align:center;font-size:16px;color:var(--moss);
+  font-style:italic;padding:16px;
+  border:1px dashed var(--gold);border-radius:var(--radius);
+}
+
+/* ===== CHECK-IN PAGE ===== */
+.checkin-header-card{
+  margin:16px 20px;background:linear-gradient(135deg,var(--ink),var(--moss));
+  border-radius:16px;padding:24px;color:#fff;text-align:center;
+}
+.checkin-streak{font-size:48px;font-weight:700;color:var(--gold);}
+.checkin-streak-label{font-size:13px;opacity:.7;margin-top:4px;}
+
+.calendar-grid{
+  margin:0 20px;background:#fff;border-radius:var(--radius);
+  padding:16px;box-shadow:0 2px 12px var(--shadow);
+}
+.calendar-title{font-size:14px;font-weight:600;margin-bottom:12px;text-align:center;}
+.calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+.cal-day{
+  aspect-ratio:1;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:12px;color:var(--gray);
+  background:var(--cream);position:relative;
+}
+.cal-day.checked{background:var(--moss);color:#fff;}
+.cal-day.today{border:2px solid var(--gold);color:var(--ink);font-weight:700;}
+.cal-day.future{opacity:.3;}
+
+.checkin-action{
+  margin:20px;text-align:center;
+}
+.btn-checkin{
+  background:linear-gradient(135deg,var(--gold),#d4a843);color:var(--deep);
+  border:none;padding:16px 56px;border-radius:30px;font-size:16px;
+  font-weight:600;letter-spacing:3px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(201,169,110,.4);transition:var(--transition);
+}
+.btn-checkin:active{transform:scale(.95);}
+.btn-checkin:disabled{opacity:.5;cursor:not-allowed;}
+
+.energy-select{
+  margin:16px 20px;background:#fff;border-radius:var(--radius);
+  padding:16px;box-shadow:0 2px 12px var(--shadow);
+}
+.energy-label{font-size:14px;font-weight:600;margin-bottom:12px;}
+.energy-slider{width:100%;-webkit-appearance:none;height:6px;background:var(--soft);border-radius:3px;outline:none;}
+.energy-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+  background:var(--gold);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.energy-value{text-align:center;font-size:32px;color:var(--moss);font-weight:700;margin:8px 0;}
+.mood-select{display:flex;justify-content:space-around;margin-top:12px;}
+.mood-btn{
+  font-size:28px;padding:8px;border-radius:12px;border:2px solid transparent;
+  cursor:pointer;transition:var(--transition);background:none;
+}
+.mood-btn.selected{border-color:var(--gold);background:var(--cream);}
+
+.chart-container{
+  margin:20px;background:#fff;border-radius:var(--radius);
+  padding:16px;box-shadow:0 2px 12px var(--shadow);
+}
+.chart-title{font-size:14px;font-weight:600;margin-bottom:12px;}
+#energyChart{width:100%;height:200px;}
+
+/* ===== PROFILE PAGE ===== */
+.profile-header{
+  background:linear-gradient(160deg,var(--ink),var(--moss));
+  padding:40px 20px 30px;text-align:center;color:#fff;
+}
+.avatar{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--gold);display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin:0 auto 12px;border:3px solid rgba(255,255,255,.3);
+}
+.profile-name{font-size:18px;font-weight:600;}
+.profile-level{font-size:12px;color:var(--gold);margin-top:4px;}
+
+.profile-stats{
+  display:flex;margin:0 20px;background:#fff;border-radius:var(--radius);
+  padding:16px;box-shadow:0 2px 12px var(--shadow);
+  margin-top:-20px;position:relative;z-index:2;
+}
+.p-stat{flex:1;text-align:center;border-right:1px solid var(--soft);}
+.p-stat:last-child{border:none;}
+.p-stat-num{font-size:22px;font-weight:700;color:var(--moss);}
+.p-stat-label{font-size:11px;color:var(--gray);margin-top:2px;}
+
+.badge-section{margin:20px;}
+.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.badge-item{
+  background:#fff;border-radius:var(--radius);padding:16px 8px;
+  text-align:center;box-shadow:0 2px 8px var(--shadow);
+}
+.badge-item.locked{opacity:.35;}
+.badge-icon{font-size:32px;margin-bottom:6px;}
+.badge-name{font-size:11px;color:var(--ink);font-weight:600;}
+.badge-desc{font-size:10px;color:var(--gray);margin-top:2px;}
+
+/* ===== COMMUNITY PAGE ===== */
+.community-header{
+  margin:16px 20px;background:linear-gradient(135deg,var(--ink),var(--moss));
+  border-radius:16px;padding:20px;color:#fff;
+}
+.class-name{font-size:18px;font-weight:600;}
+.class-info{font-size:12px;opacity:.7;margin-top:4px;}
+
+.leaderboard{
+  margin:0 20px 16px;background:#fff;border-radius:var(--radius);
+  padding:16px;box-shadow:0 2px 12px var(--shadow);
+}
+.lb-title{font-size:14px;font-weight:600;margin-bottom:12px;}
+.lb-item{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 0;border-bottom:1px solid var(--soft);
+}
+.lb-item:last-child{border:none;}
+.lb-rank{width:24px;text-align:center;font-weight:700;font-size:14px;}
+.lb-rank.gold{color:#d4a843;}
+.lb-rank.silver{color:#a0a0a0;}
+.lb-rank.bronze{color:#cd7f32;}
+.lb-avatar{width:32px;height:32px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.lb-name{flex:1;font-size:13px;}
+.lb-score{font-size:12px;color:var(--gold);font-weight:600;}
+
+.chat-section{margin:0 20px 16px;}
+.chat-messages{
+  background:#fff;border-radius:var(--radius);padding:16px;
+  box-shadow:0 2px 12px var(--shadow);max-height:400px;overflow-y:auto;
+}
+.chat-msg{display:flex;gap:10px;margin-bottom:16px;}
+.chat-msg:last-child{margin:0;}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--cream);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.chat-avatar.assistant{background:var(--gold);color:var(--deep);}
+.chat-bubble{flex:1;}
+.chat-name{font-size:11px;color:var(--gray);margin-bottom:4px;}
+.chat-text{font-size:13px;line-height:1.6;background:var(--cream);padding:10px 14px;border-radius:0 12px 12px 12px;}
+.chat-avatar.assistant + .chat-bubble .chat-text{background:#fff8e1;}
+.chat-time{font-size:10px;color:var(--gray);margin-top:4px;}
+
+.chat-input-bar{
+  margin:0 20px 16px;display:flex;gap:8px;
+}
+.chat-input{
+  flex:1;border:1px solid var(--soft);border-radius:20px;
+  padding:10px 16px;font-size:13px;outline:none;background:#fff;
+}
+.chat-send{
+  background:var(--moss);color:#fff;border:none;border-radius:50%;
+  width:40px;height:40px;cursor:pointer;font-size:16px;
+}
+
+.members-section{margin:0 20px 16px;}
+.members-grid{
+  display:flex;flex-wrap:wrap;gap:8px;background:#fff;
+  border-radius:var(--radius);padding:16px;box-shadow:0 2px 12px var(--shadow);
+}
+.member-chip{
+  display:flex;align-items:center;gap:4px;
+  background:var(--cream);border-radius:16px;padding:4px 10px 4px 4px;font-size:11px;
+}
+.member-chip-avatar{width:20px;height:20px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:9px;}
+
+/* ===== MEDITATION PAGE ===== */
+.meditation-visual{
+  height:300px;background:linear-gradient(160deg,#1a332b,#2d4a3e);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.breath-circle{
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,.3),transparent);
+  border:2px solid rgba(201,169,110,.4);
+  animation:breathe 6s ease-in-out infinite;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.8);font-size:14px;letter-spacing:2px;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);opacity:.7;}
+  50%{transform:scale(1.5);opacity:1;}
+}
+.ripple{
+  position:absolute;border-radius:50%;border:1px solid rgba(201,169,110,.2);
+  animation:ripple 4s linear infinite;
+}
+@keyframes ripple{
+  0%{width:100px;height:100px;opacity:.6;}
+  100%{width:400px;height:400px;opacity:0;}
+}
+.ripple:nth-child(2){animation-delay:1s;}
+.ripple:nth-child(3){animation-delay:2s;}
+.ripple:nth-child(4){animation-delay:3s;}
+
+.player-controls{
+  margin:0 20px;background:#fff;border-radius:var(--radius);
+  padding:20px;box-shadow:0 2px 12px var(--shadow);margin-top:-30px;
+  position:relative;z-index:2;
+}
+.player-title{font-size:16px;font-weight:600;text-align:center;}
+.player-subtitle{font-size:12px;color:var(--gray);text-align:center;margin-top:4px;}
+.player-progress{
+  margin:16px 0;height:4px;background:var(--soft);border-radius:2px;
+  cursor:pointer;position:relative;
+}
+.player-progress-fill{height:100%;background:var(--gold);border-radius:2px;width:30%;transition:width .1s;}
+.player-time{display:flex;justify-content:space-between;font-size:11px;color:var(--gray);}
+.player-btns{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:16px;}
+.player-btn{
+  background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink);
+  transition:var(--transition);
+}
+.player-btn.play{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--moss);color:#fff;font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(58,107,92,.3);
+}
+.meditation-list{margin:20px;display:flex;flex-direction:column;gap:10px;}
+.meditation-item{
+  background:#fff;border-radius:var(--radius);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 1px 8px var(--shadow);cursor:pointer;transition:var(--transition);
+}
+.meditation-item:active{transform:scale(.98);}
+.med-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.med-info{flex:1;}
+.med-name{font-size:14px;font-weight:600;}
+.med-dur{font-size:11px;color:var(--gray);margin-top:2px;}
+
+/* ===== MEMBERSHIP PAGE ===== */
+.membership-hero{
+  background:linear-gradient(160deg,var(--ink),var(--moss));
+  padding:40px 20px;text-align:center;color:#fff;
+}
+.membership-hero h2{font-size:22px;font-weight:300;letter-spacing:4px;}
+.membership-hero p{font-size:13px;opacity:.7;margin-top:8px;}
+
+.pricing-cards{padding:20px;display:flex;flex-direction:column;gap:16px;}
+.pricing-card{
+  background:#fff;border-radius:16px;padding:24px;
+  box-shadow:0 4px 20px var(--shadow);position:relative;overflow:hidden;
+}
+.pricing-card.featured{border:2px solid var(--gold);}
+.pricing-card.featured::before{
+  content:'推荐';position:absolute;top:12px;right:-28px;
+  background:var(--gold);color:var(--deep);font-size:11px;
+  padding:3px 32px;transform:rotate(45deg);
+}
+.pricing-name{font-size:16px;font-weight:600;}
+.pricing-price{font-size:32px;font-weight:700;color:var(--moss);margin:8px 0;}
+.pricing-price span{font-size:14px;font-weight:400;color:var(--gray);}
+.pricing-features{list-style:none;margin:16px 0;}
+.pricing-features li{font-size:13px;padding:6px 0;color:#555;display:flex;align-items:center;gap:8px;}
+.pricing-features li::before{content:'✓';color:var(--moss);font-weight:700;}
+.btn-pricing{
+  width:100%;padding:12px;border:none;border-radius:12px;
+  font-size:14px;cursor:pointer;transition:var(--transition);
+}
+.btn-pricing.primary{background:var(--moss);color:#fff;}
+.btn-pricing.outline{background:transparent;border:1px solid var(--moss);color:var(--moss);}
+
+.compare-table{
+  margin:0 20px 20px;background:#fff;border-radius:var(--radius);
+  overflow:hidden;box-shadow:0 2px 12px var(--shadow);
+}
+.compare-table table{width:100%;border-collapse:collapse;font-size:12px;}
+.compare-table th{background:var(--ink);color:#fff;padding:10px 8px;text-align:center;}
+.compare-table td{padding:8px;text-align:center;border-bottom:1px solid var(--soft);}
+.compare-table tr:nth-child(even){background:var(--cream);}
+
+/* ===== DIARY PAGE ===== */
+.diary-actions{
+  padding:16px 20px;display:flex;gap:12px;
+}
+.btn-new-diary{
+  flex:1;background:var(--moss);color:#fff;border:none;
+  padding:12px;border-radius:var(--radius);font-size:14px;
+  cursor:pointer;transition:var(--transition);
+}
+.diary-list{padding:0 20px;}
+.diary-card{
+  background:#fff;border-radius:var(--radius);padding:16px;
+  margin-bottom:12px;box-shadow:0 2px 8px var(--shadow);
+  cursor:pointer;transition:var(--transition);
+}
+.diary-card:active{transform:scale(.98);}
+.diary-date{font-size:12px;color:var(--gold);font-weight:600;}
+.diary-mood{font-size:12px;margin-top:4px;}
+.diary-preview{font-size:13px;color:#555;margin-top:8px;line-height:1.6;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+
+/* Diary Form Modal */
+.diary-form{padding:20px;}
+.diary-field{margin-bottom:20px;}
+.diary-field label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--ink);}
+.diary-field textarea{
+  width:100%;border:1px solid var(--soft);border-radius:10px;
+  padding:12px;font-size:13px;line-height:1.7;resize:none;
+  outline:none;font-family:inherit;min-height:80px;
+  transition:border-color .2s;
+}
+.diary-field textarea:focus{border-color:var(--moss);}
+.diary-mood-select{display:flex;gap:8px;flex-wrap:wrap;}
+.diary-mood-option{
+  padding:6px 14px;border-radius:16px;border:1px solid var(--soft);
+  font-size:12px;cursor:pointer;transition:var(--transition);background:#fff;
+}
+.diary-mood-option.selected{background:var(--moss);color:#fff;border-color:var(--moss);}
+.btn-save-diary{
+  width:100%;background:var(--moss);color:#fff;border:none;
+  padding:14px;border-radius:var(--radius);font-size:15px;
+  cursor:pointer;transition:var(--transition);
+}
+.btn-save-diary:active{transform:scale(.97);}
+
+/* Sub-page navigation */
+.sub-tabs{
+  display:flex;padding:0 20px;gap:8px;margin:12px 0;overflow-x:auto;
+}
+.sub-tab{
+  padding:8px 16px;border-radius:20px;font-size:13px;
+  border:1px solid var(--soft);cursor:pointer;white-space:nowrap;
+  transition:var(--transition);background:#fff;
+}
+.sub-tab.active{background:var(--moss);color:#fff;border-color:var(--moss);}
+
+/* Toast */
+.toast{
+  position:fixed;top:40px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:var(--ink);color:#fff;padding:12px 24px;border-radius:10px;
+  font-size:13px;z-index:999;transition:transform .3s ease;
+  max-width:300px;text-align:center;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--soft);border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="app-container" id="app">
+  <!-- ==================== HOME PAGE ==================== -->
+  <div class="page active" id="page-home">
+    <div class="home-hero">
+      <div class="hero-subtitle">二十一天心灵成长</div>
+      <div class="hero-title">真值修炼营</div>
+      <div class="hero-en">TRUE VALUE RETREAT</div>
+      <div class="hero-desc">以《道德经》千年智慧<br>化解当代职场焦虑<br>找回内心的笃定与从容</div>
+      <button class="btn-start" onclick="switchTab('course')">开始修炼</button>
+    </div>
+
+    <div class="home-stats">
+      <div class="stat-card"><div class="stat-num" id="home-users">12,847</div><div class="stat-label">修炼者</div></div>
+      <div class="stat-card"><div class="stat-num">21</div><div class="stat-label">天系统课程</div></div>
+      <div class="stat-card"><div class="stat-num">96%</div><div class="stat-label">好评率</div></div>
+    </div>
+
+    <div class="home-section">
+      <div class="section-title">今日功课</div>
+      <div class="daily-card" id="home-daily-card">
+        <div class="daily-tag">DAY 1</div>
+        <div class="daily-title">道可道，非常道</div>
+        <div class="daily-quote">放下定义，接纳不确定性。当我们不再执着于给万物贴标签，内心便获得了真正的自由。</div>
+        <button class="daily-btn" onclick="openCourseDetail(0)">进入今日课程 →</button>
+      </div>
+    </div>
+
+    <div class="home-section">
+      <div class="section-title">每日金句</div>
+      <div class="quote-wall">
+        <div class="quote-text" id="daily-quote-text">"上善若水，水善利万物而不争。"</div>
+        <div class="quote-src">— 《道德经》第八章</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== COURSE PAGE ==================== -->
+  <div class="page" id="page-course">
+    <div class="page-header">
+      <div class="page-title">二十一天课程</div>
+      <div class="page-subtitle">每日一课，循序渐进</div>
+    </div>
+    <div class="course-progress">
+      <div class="progress-text">
+        <span>修炼进度</span>
+        <span id="progress-pct">0/21</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="course-list" id="course-list"></div>
+  </div>
+
+  <!-- ==================== CHECKIN PAGE (sub of profile) ==================== -->
+  <div class="page" id="page-checkin">
+    <div class="page-header">
+      <div class="page-title">打卡中心</div>
+      <div class="page-subtitle">记录每日修炼，见证能量成长</div>
+    </div>
+    <div class="checkin-header-card">
+      <div class="checkin-streak" id="checkin-streak">0</div>
+      <div class="checkin-streak-label">连续打卡天数</div>
+    </div>
+
+    <div class="energy-select" id="checkin-form">
+      <div class="energy-label">今日能量值</div>
+      <div class="energy-value" id="energy-display">5</div>
+      <input type="range" class="energy-slider" id="energy-slider" min="1" max="10" value="5" oninput="document.getElementById('energy-display').textContent=this.value">
+      <div class="energy-label" style="margin-top:16px">今日心情</div>
+      <div class="mood-select" id="mood-select">
+        <button class="mood-btn" data-mood="😊" onclick="selectMood(this)">😊</button>
+        <button class="mood-btn" data-mood="😌" onclick="selectMood(this)">😌</button>
+        <button class="mood-btn" data-mood="😐" onclick="selectMood(this)">😐</button>
+        <button class="mood-btn" data-mood="😔" onclick="selectMood(this)">😔</button>
+        <button class="mood-btn" data-mood="😤" onclick="selectMood(this)">😤</button>
+      </div>
+    </div>
+
+    <div class="checkin-action">
+      <button class="btn-checkin" id="btn-checkin" onclick="doCheckin()">今日打卡</button>
+    </div>
+
+    <div class="calendar-grid">
+      <div class="calendar-title">21天打卡日历</div>
+      <div class="calendar-days" id="calendar-grid"></div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">能量趋势图</div>
+      <canvas id="energyChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ==================== COMMUNITY PAGE ==================== -->
+  <div class="page" id="page-community">
+    <div class="page-header">
+      <div class="page-title">小班社群</div>
+      <div class="page-subtitle">同修共进，相互激励</div>
+    </div>
+    <div class="community-header">
+      <div class="class-name">道法自然·第42期修炼班</div>
+      <div class="class-info">50人小班 · 助教：静心老师 · 已开营12天</div>
+    </div>
+
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="switchCommunityTab('rank',this)">打卡排行</div>
+      <div class="sub-tab" onclick="switchCommunityTab('chat',this)">讨论区</div>
+      <div class="sub-tab" onclick="switchCommunityTab('members',this)">班级成员</div>
+    </div>
+
+    <div id="community-rank">
+      <div class="leaderboard">
+        <div class="lb-title">🏆 今日打卡排行榜</div>
+        <div id="leaderboard-list"></div>
+      </div>
+    </div>
+
+    <div id="community-chat" style="display:none">
+      <div class="chat-section">
+        <div class="chat-messages" id="chat-messages"></div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" id="chat-input" placeholder="分享你的修炼感悟..." maxlength="200">
+        <button class="chat-send" onclick="sendChat()">➤</button>
+      </div>
+    </div>
+
+    <div id="community-members" style="display:none">
+      <div class="members-section">
+        <div class="section-title">班级成员 (50人)</div>
+        <div class="members-grid" id="members-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROFILE PAGE ==================== -->
+  <div class="page" id="page-profile">
+    <div class="profile-header">
+      <div class="avatar" id="profile-avatar">道</div>
+      <div class="profile-name" id="profile-name">修炼者</div>
+      <div class="profile-level" id="profile-level">初窥门径</div>
+    </div>
+
+    <div class="profile-stats">
+      <div class="p-stat"><div class="p-stat-num" id="p-energy">0</div><div class="p-stat-label">累计能量</div></div>
+      <div class="p-stat"><div class="p-stat-num" id="p-days">0</div><div class="p-stat-label">打卡天数</div></div>
+      <div class="p-stat"><div class="p-stat-num" id="p-streak">0</div><div class="p-stat-label">连续天数</div></div>
+    </div>
+
+    <div class="sub-tabs" style="margin-top:24px;">
+      <div class="sub-tab active" onclick="switchProfileTab('badges',this)">成就徽章</div>
+      <div class="sub-tab" onclick="switchProfileTab('checkin',this)">打卡中心</div>
+      <div class="sub-tab" onclick="switchProfileTab('diary',this)">真值日记</div>
+      <div class="sub-tab" onclick="switchProfileTab('meditation',this)">冥想</div>
+      <div class="sub-tab" onclick="switchProfileTab('membership',this)">会员</div>
+    </div>
+
+    <div id="profile-badges">
+      <div class="badge-section">
+        <div class="section-title">成就徽章</div>
+        <div class="badge-grid" id="badge-grid"></div>
+      </div>
+    </div>
+
+    <div id="profile-checkin" style="display:none"></div>
+    <div id="profile-diary" style="display:none"></div>
+    <div id="profile-meditation" style="display:none"></div>
+    <div id="profile-membership" style="display:none"></div>
+  </div>
+
+  <!-- ==================== COURSE DETAIL MODAL ==================== -->
+  <div class="modal-overlay" id="course-modal" onclick="closeCourseModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-day" id="modal-day"></div>
+        <div class="modal-title" id="modal-title"></div>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ==================== DIARY MODAL ==================== -->
+  <div class="modal-overlay" id="diary-modal" onclick="closeDiaryModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title">真值日记</div>
+      </div>
+      <div class="diary-form" id="diary-form-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ==================== TAB BAR ==================== -->
+  <nav class="tab-bar">
+    <div class="tab-item active" onclick="switchTab('home')">
+      <div class="tab-icon">🏠</div>
+      <span>首页</span>
+    </div>
+    <div class="tab-item" onclick="switchTab('course')">
+      <div class="tab-icon">📖</div>
+      <span>课程</span>
+    </div>
+    <div class="tab-item" onclick="switchTab('checkin')">
+      <div class="tab-icon">✅</div>
+      <span>打卡</span>
+    </div>
+    <div class="tab-item" onclick="switchTab('community')">
+      <div class="tab-icon">👥</div>
+      <span>社群</span>
+    </div>
+    <div class="tab-item" onclick="switchTab('profile')">
+      <div class="tab-icon">🧘</div>
+      <span>我的</span>
+    </div>
+  </nav>
+</div>
+<script>
+// ==================== COURSE DATA ====================
+const COURSES = [
+  {
+    day: 1, chapter: '第一章', title: '道可道，非常道',
+    theme: '放下定义，接纳不确定性',
+    original: '道可道，非常道；名可名，非常名。无名天地之始，有名万物之母。故常无欲，以观其妙；常有欲，以观其徼。此两者同出而异名，同谓之玄，玄之又玄，众妙之门。',
+    reading: '在互联网公司里，我们习惯用KPI定义一切——用数据定义增长，用title定义能力，用薪资定义价值。但老子在两千多年前就告诉我们：真正的"道"是无法被定义的。当你被"35岁危机"的标签困住，当你因为没拿到晋升而否定自己——请记住，你不是你的title，也不是你的OKR完成率。那些无法被量化的东西——你的创造力、你的善良、你的独特视角——才是最珍贵的。放下对确定性的执着，你会发现，不确定性中蕴藏着最大的可能性。',
+    task: '今日实践：「不贴标签」观察\n\n在今天的工作中，尝试用5-10分钟做这个练习：\n1. 选择一个你平时会下判断的场景（如开会时同事的发言）\n2. 暂停你的第一反应，不要急着评价"这个想法好/不好"\n3. 只是观察，像看一条河流过一样看待它\n4. 在笔记本上记录：我今天放下了哪些"定义"？感受如何？',
+    quote: '放下定义，你就是无限可能。'
+  },
+  {
+    day: 2, chapter: '第八章', title: '上善若水',
+    theme: '像水一样工作，不争而善胜',
+    original: '上善若水。水善利万物而不争，处众人之所恶，故几于道。居善地，心善渊，与善仁，言善信，政善治，事善能，动善时。夫唯不争，故无尤。',
+    reading: '职场内卷让每个人都像是在赛跑，争排名、争资源、争曝光度。但你有没有发现，真正厉害的人往往不是最"卷"的那个？水的智慧在于：它不争最高处，却能汇成江海；它不争最硬，却能穿透岩石。在团队中，与其争谁写的代码最多、谁加班最晚，不如像水一样——找到团队最需要你的地方，默默补位。当你不再执着于"争赢"，你会发现自己收获的远比争来的多。帮助同事解决一个棘手bug，主动承担没人愿意做的项目文档——这些"利他"行为，最终都会回到你身上。',
+    task: '今日实践：「不争」实验\n\n在今天的工作中进行5-10分钟的"不争"观察：\n1. 找到一个你平时会"争"的场景（争功劳、争话语权、争最后一个字）\n2. 今天选择不争，主动退一步\n3. 观察这个"不争"带来了什么变化\n4. 晚上记录：不争的感受是什么？结果和预期一样吗？',
+    quote: '不争，是最高级的争。'
+  },
+  {
+    day: 3, chapter: '第二十二章', title: '曲则全',
+    theme: '弯曲的智慧，退让是前进',
+    original: '曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。是以圣人抱一为天下式。不自见，故明；不自是，故彰；不自伐，故有功；不自矜，故长。夫唯不争，故天下莫能与之争。',
+    reading: '在996的高压环境下，我们总被教育要"直面问题""正面刚"。但老子说"曲则全"——有时候弯曲反而能保全自己。想想竹子，正因为它会弯曲，才能在暴风雨中存活，而那些笔直的树往往最先被折断。当项目方向你不认同时，不一定要在会上拍桌子对抗——也许先听完别人的理由，私下再沟通，效果反而更好。当领导的决策你觉得有问题，用数据和事实"曲线"说服，比硬刚更有智慧。退让不是软弱，是蓄力。弯腰不是屈服，是为了跳得更高。',
+    task: '今日实践：「曲则全」体验\n\n用5-10分钟做这个练习：\n1. 回想最近一个让你想"硬刚"的场景\n2. 思考：如果我选择"弯曲"的方式，会怎样处理？\n3. 写下两种方案的对比（直接对抗 vs 柔性迂回）\n4. 在今天的一次互动中尝试"曲"的方式，观察效果',
+    quote: '会弯曲的人，才不会被折断。'
+  },
+  {
+    day: 4, chapter: '第三十三章', title: '知人者智，自知者明',
+    theme: '认识自己比打败对手更重要',
+    original: '知人者智，自知者明。胜人者有力，自胜者强。知足者富，强行者有志。不失其所者久，死而不亡者寿。',
+    reading: '互联网人最擅长的就是"对标"——对标竞品、对标同行、对标同龄人。我们总是在看别人：他年薪多少？他什么时候晋升的？他创业成功了？但老子说"知人者智，自知者明"——了解别人只是聪明，了解自己才是真正的明智。比起研究竞争对手，花点时间研究自己吧：你真正热爱什么？你的核心优势是什么？什么让你进入心流状态？"胜人者有力，自胜者强"——打败别人只需要力量，但战胜自己的弱点、惰性和恐惧，才是真正的强大。今天开始，把目光从外面收回来，往内看。',
+    task: '今日实践：「自知」清单\n\n花10分钟做一份"自我认知清单"：\n1. 写下3个你确定的优势（不用谦虚）\n2. 写下3个你承认的短板（不用逃避）\n3. 写下3件让你真正感到快乐的事（不是"应该"快乐的事）\n4. 问自己：如果不和任何人比较，我对现在的自己满意吗？',
+    quote: '认识自己，是一切成长的起点。'
+  },
+  {
+    day: 5, chapter: '第七十六章', title: '人之生也柔弱',
+    theme: '柔软的力量',
+    original: '人之生也柔弱，其死也坚强。草木之生也柔脆，其死也枯槁。故坚强者死之徒，柔弱者生之徒。是以兵强则灭，木强则折。强大处下，柔弱处上。',
+    reading: '在职场中，我们总觉得要"强硬"才能生存——强硬地push需求、强硬地谈判资源、强硬地面对质疑。但老子观察到一个深刻的自然规律：活着的东西都是柔软的，死了的东西才是僵硬的。新生婴儿的身体多么柔软，而枯木是多么僵硬。最好的程序员不是写最复杂代码的人，而是写最灵活、最易扩展代码的人。最好的管理者不是最强势的人，而是能倾听、能适应变化的人。柔软不是没有力量，恰恰相反——柔软是最持久的力量。水滴石穿，不是因为水有多硬，而是因为水够柔软，够持久。',
+    task: '今日实践：「柔软」体验\n\n今天尝试在一个场景中保持柔软：\n1. 当有人反对你的观点时，先说"你说得有道理"\n2. 当遇到计划外的变化时，不抱怨，先思考"这个变化里有什么机会"\n3. 找一个你一直"硬扛"的事情，允许自己示弱或求助\n4. 记录：保持柔软的感受，和平时有什么不同？',
+    quote: '柔软，是生命力最好的证明。'
+  },
+  {
+    day: 6, chapter: '第十六章', title: '致虚极，守静笃',
+    theme: '在忙碌中找到内心的静',
+    original: '致虚极，守静笃。万物并作，吾以观复。夫物芸芸，各复归其根。归根曰静，静曰复命。复命曰常，知常曰明。不知常，妄作凶。知常容，容乃公，公乃全，全乃天，天乃道，道乃久，没身不殆。',
+    reading: '打开手机——钉钉消息99+、微信群满屏红点、邮件列表刷不完、日历上会议排到天黑。互联网人的日常就是被无数信息裹挟着往前冲，根本停不下来。但老子说"致虚极，守静笃"——把内心清空到极致，保持安静到笃定。不是让你辞职去山里打坐，而是在忙碌中建立一个"内心的锚点"。试试这个方法：每天找10分钟完全属于自己的时间。关掉通知，关上门，什么都不做。一开始会不习惯、会焦虑、会觉得浪费时间。但坚持下去你会发现，这10分钟的"静"，比你多工作1小时产出更大——因为你的大脑终于有机会整理、归类、创造了。',
+    task: '今日实践：「10分钟静坐」\n\n找一个安静的时段（推荐午休或下班后）：\n1. 找一个舒适的坐姿，关闭手机通知\n2. 闭上眼睛，将注意力放在呼吸上\n3. 吸气4秒——保持4秒——呼气6秒\n4. 如果走神了，温和地把注意力拉回来（不要责怪自己）\n5. 10分钟后，记录：静坐前后的状态有什么变化？',
+    quote: '在喧嚣中守住内心的静，就守住了自己。'
+  },
+  {
+    day: 7, chapter: '第八十一章', title: '圣人不积',
+    theme: '减法的智慧，越少越富足',
+    original: '信言不美，美言不信。善者不辩，辩者不善。知者不博，博者不知。圣人不积，既以为人，己愈有；既以与人，己愈多。天之道，利而不害。圣人之道，为而不争。',
+    reading: '我们的职业生涯像是一个不断做加法的过程——学更多技能、拿更多证书、接更多项目、加更多人脉。但老子在道德经的最后一章告诉我们"圣人不积"——真正有智慧的人不囤积。看看你的收藏夹里有多少"稍后再看"的文章？你的硬盘里有多少"也许有用"的资料？你的日程里有多少"不好意思拒绝"的会议？做减法比做加法难得多，但也有价值得多。一个团队如果只做3件事并做到极致，远比同时做20件事效果好。你的人生也是——当你减去那些不重要的，留下来的每一样都是珍贵的。',
+    task: '今日实践：「数字断舍离」\n\n花10分钟做一次数字清理：\n1. 删除手机上3个你超过一个月没打开的App\n2. 退出3个你从来不看的群聊\n3. 清理浏览器收藏夹中不会再看的链接\n4. 反思：删掉这些东西后的感受是什么？是不是觉得轻松了一点？\n5. 思考：工作和生活中，还有什么可以"减去"的？',
+    quote: '做减法，才是人生最高级的加法。'
+  }
+];
+
+// Days 8-21 brief info
+for (let i = 8; i <= 21; i++) {
+  const titles = {
+    8: {t:'第十一章·无之为用', th:'留白的智慧，"无"的价值'},
+    9: {t:'第二章·美之为美', th:'放下二元对立思维'},
+    10:{t:'第四十四章·名与身', th:'什么时候该止步？'},
+    11:{t:'第十五章·古之善为士', th:'大智若愚的处世智慧'},
+    12:{t:'第二十三章·希言自然', th:'少说话，多做事'},
+    13:{t:'第三十七章·道常无为', th:'无为而治的管理智慧'},
+    14:{t:'第四十六章·天下有道', th:'知足的幸福感'},
+    15:{t:'第五十六章·知者不言', th:'沉默是最好的表达'},
+    16:{t:'第六十三章·为无为', th:'从小事做起的力量'},
+    17:{t:'第六十四章·千里之行', th:'千里之行始于足下'},
+    18:{t:'第七十八章·天下莫柔弱于水', th:'至柔至刚的终极智慧'},
+    19:{t:'第六十七章·三宝', th:'慈、俭、不敢为天下先'},
+    20:{t:'第二十五章·道法自然', th:'回归自然的本真'},
+    21:{t:'第四十二章·道生一', th:'道的圆满，新的开始'}
+  };
+  COURSES.push({
+    day: i,
+    title: titles[i].t,
+    theme: titles[i].th,
+    chapter: '第'+i+'课',
+    original: '',reading: '',task: '',quote: ''
+  });
+}
+
+// ==================== STATE ====================
+const STATE_KEY = 'zhenzhicamp_state';
+let state = loadState();
+
+function defaultState() {
+  return {
+    currentDay: 1,
+    checkins: {},      // {dayIndex: {energy, mood, date}}
+    totalEnergy: 0,
+    streak: 0,
+    diaries: [],
+    chatMessages: [],
+    badges: {},
+    userName: '修炼者'
+  };
+}
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(STATE_KEY);
+    if (s) return {...defaultState(), ...JSON.parse(s)};
+  } catch(e) {}
+  return defaultState();
+}
+
+function saveState() {
+  localStorage.setItem(STATE_KEY, JSON.stringify(state));
+}
+
+// ==================== NAVIGATION ====================
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => {p.classList.remove('active');});
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+
+  const pageId = 'page-' + tab;
+  const page = document.getElementById(pageId);
+  if (page) {
+    page.classList.add('active');
+    // Smooth fade
+    page.style.opacity = '0';
+    requestAnimationFrame(() => { page.style.opacity = '1'; });
+  }
+
+  const tabs = document.querySelectorAll('.tab-item');
+  const tabMap = ['home','course','checkin','community','profile'];
+  const idx = tabMap.indexOf(tab);
+  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+
+  // Render page content
+  if (tab === 'course') renderCourseList();
+  if (tab === 'checkin') renderCheckin();
+  if (tab === 'community') renderCommunity();
+  if (tab === 'profile') renderProfile();
+}
+
+// ==================== TOAST ====================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ==================== COURSE LIST ====================
+function renderCourseList() {
+  const list = document.getElementById('course-list');
+  const completedCount = Object.keys(state.checkins).length;
+
+  document.getElementById('progress-pct').textContent = completedCount + '/21';
+  document.getElementById('progress-fill').style.width = ((completedCount / 21) * 100) + '%';
+
+  let html = '';
+  COURSES.forEach((c, i) => {
+    const isCompleted = state.checkins[i];
+    const isCurrent = i === (state.currentDay - 1);
+    const isLocked = i > state.currentDay - 1 && !isCompleted;
+
+    let statusClass = isCompleted ? 'completed' : (isCurrent ? 'current' : 'locked');
+    let statusText = isCompleted ? '已完成' : (isCurrent ? '进行中' : '🔒');
+
+    html += `<div class="course-card ${statusClass}" onclick="${isLocked ? '' : 'openCourseDetail('+i+')'}">
+      <div class="course-day">${c.day}</div>
+      <div class="course-info">
+        <div class="course-name">${c.title}</div>
+        <div class="course-desc">${c.theme}</div>
+      </div>
+      <div class="course-status">${statusText}</div>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+
+// ==================== COURSE DETAIL ====================
+function openCourseDetail(index) {
+  const c = COURSES[index];
+  if (!c) return;
+
+  document.getElementById('modal-day').textContent = 'DAY ' + c.day + ' · ' + (c.chapter || '');
+  document.getElementById('modal-title').textContent = c.title + ' — ' + c.theme;
+
+  let body = '';
+  if (c.original) {
+    body += `<div class="modal-section">
+      <div class="modal-section-title">📜 道德经原文</div>
+      <div class="original-text">${c.original}</div>
+    </div>`;
+  }
+  if (c.reading) {
+    body += `<div class="modal-section">
+      <div class="modal-section-title">💡 现代解读</div>
+      <div class="modern-reading">${c.reading}</div>
+    </div>`;
+  }
+  if (c.task) {
+    body += `<div class="modal-section">
+      <div class="modal-section-title">🎯 今日实践任务</div>
+      <div class="practice-task"><p>${c.task.replace(/\n/g, '<br>')}</p></div>
+    </div>`;
+  }
+  if (c.quote) {
+    body += `<div class="modal-section">
+      <div class="modal-section-title">✨ 能量金句</div>
+      <div class="energy-quote">"${c.quote}"</div>
+    </div>`;
+  }
+  if (!c.original && !c.reading) {
+    body += `<div class="modal-section"><div class="modern-reading" style="text-align:center;padding:40px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px;">课程内容即将上线</div>
+      <div style="font-size:13px;color:var(--gray);">完成前面的课程后解锁完整内容</div>
+    </div></div>`;
+  }
+
+  document.getElementById('modal-body').innerHTML = body;
+  const modal = document.getElementById('course-modal');
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => modal.classList.add('show'));
+}
+
+function closeCourseModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  const modal = document.getElementById('course-modal');
+  modal.classList.remove('show');
+  setTimeout(() => { modal.style.display = 'none'; }, 350);
+}
+</script>
+<script>
+// ==================== CHECKIN SYSTEM ====================
+function renderCheckin() {
+  updateCheckinStreak();
+  renderCalendar();
+  renderEnergyChart();
+  updateCheckinButton();
+}
+
+function updateCheckinStreak() {
+  let streak = 0;
+  const today = new Date();
+  for (let i = state.currentDay - 1; i >= 0; i--) {
+    if (state.checkins[i]) streak++;
+    else break;
+  }
+  state.streak = streak;
+  document.getElementById('checkin-streak').textContent = streak;
+}
+
+function updateCheckinButton() {
+  const btn = document.getElementById('btn-checkin');
+  const todayIdx = state.currentDay - 1;
+  if (state.checkins[todayIdx]) {
+    btn.textContent = '今日已打卡 ✓';
+    btn.disabled = true;
+  } else {
+    btn.textContent = '今日打卡';
+    btn.disabled = false;
+  }
+}
+
+let selectedMood = '😊';
+function selectMood(el) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = el.dataset.mood;
+}
+
+function doCheckin() {
+  const todayIdx = state.currentDay - 1;
+  if (state.checkins[todayIdx]) {
+    showToast('今日已打卡');
+    return;
+  }
+
+  const energy = parseInt(document.getElementById('energy-slider').value);
+  state.checkins[todayIdx] = {
+    energy: energy,
+    mood: selectedMood,
+    date: new Date().toISOString()
+  };
+  state.totalEnergy += energy;
+
+  // Advance day
+  if (state.currentDay < 21) state.currentDay++;
+
+  // Check badges
+  checkBadges();
+  saveState();
+
+  showToast('打卡成功！能量 +' + energy);
+  renderCheckin();
+  updateHomeDailyCard();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calendar-grid');
+  let html = '';
+  for (let i = 0; i < 21; i++) {
+    const isChecked = state.checkins[i];
+    const isToday = i === state.currentDay - 1;
+    const isFuture = i > state.currentDay - 1 && !isChecked;
+
+    let cls = '';
+    if (isChecked) cls = 'checked';
+    else if (isToday) cls = 'today';
+    else if (isFuture) cls = 'future';
+
+    html += `<div class="cal-day ${cls}">${i + 1}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ==================== ENERGY CHART (Canvas) ====================
+function renderEnergyChart() {
+  const canvas = document.getElementById('energyChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Adjust for device pixel ratio
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement;
+  canvas.width = rect.clientWidth * dpr;
+  canvas.height = 200 * dpr;
+  canvas.style.width = rect.clientWidth + 'px';
+  canvas.style.height = '200px';
+  ctx.scale(dpr, dpr);
+
+  const W = rect.clientWidth;
+  const H = 200;
+  const padL = 30, padR = 10, padT = 20, padB = 30;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  // Clear
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid lines
+  ctx.strokeStyle = '#e8e0d4';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 10; i += 2) {
+    const y = padT + chartH - (i / 10) * chartH;
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(W - padR, y);
+    ctx.stroke();
+    ctx.fillStyle = '#8a9a92';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(i, padL - 5, y + 3);
+  }
+
+  // X axis labels
+  ctx.fillStyle = '#8a9a92';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  const step = chartW / 20;
+  for (let i = 0; i < 21; i++) {
+    if (i % 3 === 0 || i === 20) {
+      ctx.fillText('D' + (i + 1), padL + i * step, H - 8);
+    }
+  }
+
+  // Collect data points
+  const points = [];
+  for (let i = 0; i < 21; i++) {
+    if (state.checkins[i]) {
+      points.push({
+        x: padL + i * step,
+        y: padT + chartH - (state.checkins[i].energy / 10) * chartH,
+        val: state.checkins[i].energy
+      });
+    }
+  }
+
+  if (points.length === 0) {
+    ctx.fillStyle = '#8a9a92';
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('完成打卡后查看能量趋势', W / 2, H / 2);
+    return;
+  }
+
+  // Fill area
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, padT + chartH);
+  points.forEach(p => ctx.lineTo(p.x, p.y));
+  ctx.lineTo(points[points.length - 1].x, padT + chartH);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, padT, 0, padT + chartH);
+  grad.addColorStop(0, 'rgba(58,107,92,0.3)');
+  grad.addColorStop(1, 'rgba(58,107,92,0.02)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = '#3a6b5c';
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  points.forEach((p, idx) => {
+    if (idx === 0) ctx.moveTo(p.x, p.y);
+    else ctx.lineTo(p.x, p.y);
+  });
+  ctx.stroke();
+
+  // Dots
+  points.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#3a6b5c';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  });
+}
+
+// ==================== PROFILE ====================
+function renderProfile() {
+  const completedCount = Object.keys(state.checkins).length;
+  document.getElementById('p-energy').textContent = state.totalEnergy;
+  document.getElementById('p-days').textContent = completedCount;
+  updateCheckinStreak();
+  document.getElementById('p-streak').textContent = state.streak;
+  document.getElementById('profile-name').textContent = state.userName;
+
+  // Level
+  let level = '初窥门径';
+  if (completedCount >= 21) level = '得道高人';
+  else if (completedCount >= 14) level = '融会贯通';
+  else if (completedCount >= 7) level = '渐入佳境';
+  document.getElementById('profile-level').textContent = level;
+
+  renderBadges();
+}
+
+// ==================== BADGES ====================
+const BADGE_DEFS = [
+  { id: 'first', name: '初心', desc: '完成首次打卡', icon: '🌱', check: s => Object.keys(s.checkins).length >= 1 },
+  { id: 'three', name: '小有所成', desc: '连续打卡3天', icon: '🌿', check: s => s.streak >= 3 },
+  { id: 'seven', name: '渐入佳境', desc: '连续打卡7天', icon: '🎋', check: s => s.streak >= 7 },
+  { id: 'fourteen', name: '意志如铁', desc: '连续打卡14天', icon: '⛰️', check: s => s.streak >= 14 },
+  { id: 'full', name: '功德圆满', desc: '21天全勤', icon: '🏆', check: s => Object.keys(s.checkins).length >= 21 },
+  { id: 'energy50', name: '能量充沛', desc: '累计能量50+', icon: '⚡', check: s => s.totalEnergy >= 50 },
+  { id: 'energy100', name: '内力深厚', desc: '累计能量100+', icon: '🔥', check: s => s.totalEnergy >= 100 },
+  { id: 'diary3', name: '善于反思', desc: '写3篇日记', icon: '📝', check: s => s.diaries.length >= 3 },
+  { id: 'perfect10', name: '巅峰状态', desc: '能量值达到10', icon: '💎', check: s => Object.values(s.checkins).some(c => c.energy === 10) },
+];
+
+function checkBadges() {
+  BADGE_DEFS.forEach(b => {
+    if (!state.badges[b.id] && b.check(state)) {
+      state.badges[b.id] = true;
+      showToast('🎉 获得徽章：' + b.name);
+    }
+  });
+}
+
+function renderBadges() {
+  const grid = document.getElementById('badge-grid');
+  let html = '';
+  BADGE_DEFS.forEach(b => {
+    const unlocked = state.badges[b.id];
+    html += `<div class="badge-item ${unlocked ? '' : 'locked'}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function switchProfileTab(tab, el) {
+  // Update sub-tabs
+  el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+
+  ['badges','checkin','diary','meditation','membership'].forEach(t => {
+    const section = document.getElementById('profile-' + t);
+    if (section) section.style.display = (t === tab) ? 'block' : 'none';
+  });
+
+  if (tab === 'checkin') renderProfileCheckin();
+  if (tab === 'diary') renderProfileDiary();
+  if (tab === 'meditation') renderProfileMeditation();
+  if (tab === 'membership') renderProfileMembership();
+}
+
+// ==================== PROFILE CHECKIN SUB-PAGE ====================
+function renderProfileCheckin() {
+  const container = document.getElementById('profile-checkin');
+  const completedCount = Object.keys(state.checkins).length;
+  let calHtml = '';
+  for (let i = 0; i < 21; i++) {
+    const c = state.checkins[i];
+    const isToday = i === state.currentDay - 1;
+    let cls = c ? 'checked' : (isToday ? 'today' : (i > state.currentDay - 1 ? 'future' : ''));
+    calHtml += `<div class="cal-day ${cls}">${i + 1}</div>`;
+  }
+  container.innerHTML = `
+    <div style="margin:16px 20px;text-align:center;padding:20px;background:linear-gradient(135deg,var(--ink),var(--moss));border-radius:16px;color:#fff;">
+      <div style="font-size:48px;font-weight:700;color:var(--gold);">${completedCount}</div>
+      <div style="font-size:13px;opacity:.7;">累计打卡天数</div>
+    </div>
+    <div class="calendar-grid"><div class="calendar-title">21天打卡日历</div><div class="calendar-days">${calHtml}</div></div>
+  `;
+}
+
+// ==================== COMMUNITY ====================
+const MOCK_MEMBERS = [];
+const SURNAMES = ['张','李','王','刘','陈','杨','赵','黄','周','吴','徐','孙','马','胡','朱','高','林','何','郭','罗'];
+const NAMES = ['静心','明道','清风','若水','无为','守拙','知行','善居','致远','怀柔','悟空','慧能','一心','正念','素朴','归真','养心','得道','通达','自在','虚怀','笃行','思齐','弘毅','立诚','敬一','见素','抱朴','持盈','守中','安然','观妙','如是','法喜','禅定','净心','明觉','觉悟','智远','道源','圆通','光明','法雨','慧日','净土','真如','般若','法华','金刚','妙觉'];
+
+for (let i = 0; i < 50; i++) {
+  MOCK_MEMBERS.push({
+    name: SURNAMES[i % SURNAMES.length] + NAMES[i % NAMES.length],
+    energy: Math.floor(Math.random() * 120) + 10,
+    streak: Math.floor(Math.random() * 15) + 1,
+    checked: Math.random() > 0.3
+  });
+}
+// Sort by energy desc for leaderboard
+const LEADERBOARD = [...MOCK_MEMBERS].filter(m => m.checked).sort((a, b) => b.energy - a.energy);
+
+const MOCK_CHATS = [
+  { name: '静心老师', avatar: '🧘', isAssistant: true, text: '各位同修早上好！今天是我们修炼营的第12天，坚持到现在的每一位都非常了不起。今天的课程是关于"柔软的力量"，希望大家在工作中找到一个场景来实践。', time: '08:30' },
+  { name: '张明道', avatar: '🌊', text: '昨天的"不争"实验真的太有感触了。开会时我忍住没去反驳产品经理的方案，结果后来他自己发现了问题，主动来找我讨论。不争反而赢了！', time: '09:15' },
+  { name: '李若水', avatar: '🍃', text: '今天尝试了10分钟静坐，一开始满脑子都是明天要上线的需求，后来慢慢安静下来了。结束后反而想到了一个更优的技术方案。', time: '10:22' },
+  { name: '静心老师', avatar: '🧘', isAssistant: true, text: '非常好的分享！这就是"致虚极，守静笃"的力量。当我们的大脑真正安静下来，创造力自然就涌现了。大家今天也可以试试。🙏', time: '10:35' },
+  { name: '王清风', avatar: '🎋', text: '打卡Day12！今天的任务是"柔软体验"，我在code review的时候没有直接说同事代码有问题，而是说"这里有个思路我们一起看看"，氛围好了很多。', time: '11:40' },
+  { name: '陈无为', avatar: '☁️', text: '加入修炼营之前我每天都很焦虑，现在虽然工作一样忙，但心态真的不一样了。用老子的话说，"知足者富"。', time: '14:20' },
+  { name: '赵守拙', avatar: '🏔️', text: '有没有人和我一样，做了数字断舍离后感觉手机清爽了好多？删了12个app，退了8个群，世界安静了。', time: '15:50' },
+  { name: '周知行', avatar: '🌙', text: '"圣人不积"这课真的说到我心坎里了。收藏夹里2000+篇文章，真正看过的不到50篇。今天清理了一半，解放了！', time: '17:05' }
+];
+
+function renderCommunity() {
+  renderLeaderboard();
+  renderChatMessages();
+  renderMembers();
+}
+
+function renderLeaderboard() {
+  const list = document.getElementById('leaderboard-list');
+  let html = '';
+  const top10 = LEADERBOARD.slice(0, 10);
+  top10.forEach((m, i) => {
+    const rankCls = i === 0 ? 'gold' : (i === 1 ? 'silver' : (i === 2 ? 'bronze' : ''));
+    const rankText = i < 3 ? ['🥇','🥈','🥉'][i] : (i + 1);
+    html += `<div class="lb-item">
+      <div class="lb-rank ${rankCls}">${rankText}</div>
+      <div class="lb-avatar">${m.name[0]}</div>
+      <div class="lb-name">${m.name}</div>
+      <div class="lb-score">${m.energy} 能量</div>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+
+function renderChatMessages() {
+  const container = document.getElementById('chat-messages');
+  const allMsgs = [...MOCK_CHATS, ...state.chatMessages];
+  let html = '';
+  allMsgs.forEach(m => {
+    html += `<div class="chat-msg">
+      <div class="chat-avatar ${m.isAssistant ? 'assistant' : ''}">${m.avatar || m.name[0]}</div>
+      <div class="chat-bubble">
+        <div class="chat-name">${m.name}${m.isAssistant ? ' · 助教' : ''}</div>
+        <div class="chat-text">${m.text}</div>
+        <div class="chat-time">${m.time || ''}</div>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  state.chatMessages.push({
+    name: state.userName,
+    avatar: '🧑',
+    text: text,
+    time: new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'})
+  });
+  input.value = '';
+  saveState();
+  renderChatMessages();
+}
+
+function renderMembers() {
+  const grid = document.getElementById('members-grid');
+  let html = '';
+  MOCK_MEMBERS.forEach(m => {
+    html += `<div class="member-chip">
+      <div class="member-chip-avatar">${m.name[0]}</div>
+      ${m.name}
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function switchCommunityTab(tab, el) {
+  el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['rank','chat','members'].forEach(t => {
+    document.getElementById('community-' + t).style.display = (t === tab) ? 'block' : 'none';
+  });
+}
+
+// ==================== MEDITATION ====================
+function renderProfileMeditation() {
+  const container = document.getElementById('profile-meditation');
+  const meditations = [
+    { name: '晨间唤醒冥想', dur: '8分钟', icon: '🌅', color: '#fff3e0' },
+    { name: '上善若水·水流冥想', dur: '10分钟', icon: '🌊', color: '#e3f2fd' },
+    { name: '致虚极·深度放松', dur: '15分钟', icon: '🌙', color: '#ede7f6' },
+    { name: '道法自然·森林浴', dur: '12分钟', icon: '🌲', color: '#e8f5e9' },
+    { name: '呼吸观照·正念冥想', dur: '5分钟', icon: '🫧', color: '#fce4ec' },
+    { name: '睡前安神·归静冥想', dur: '20分钟', icon: '💤', color: '#e0f2f1' },
+  ];
+
+  let listHtml = '';
+  meditations.forEach((m, i) => {
+    listHtml += `<div class="meditation-item" onclick="playMeditation(${i})">
+      <div class="med-icon" style="background:${m.color}">${m.icon}</div>
+      <div class="med-info"><div class="med-name">${m.name}</div><div class="med-dur">${m.dur}</div></div>
+      <span style="color:var(--gray)">▶</span>
+    </div>`;
+  });
+
+  container.innerHTML = `
+    <div class="meditation-visual">
+      <div class="ripple"></div><div class="ripple"></div><div class="ripple"></div><div class="ripple"></div>
+      <div class="breath-circle" id="breath-text">吸气...</div>
+    </div>
+    <div class="player-controls">
+      <div class="player-title" id="med-player-title">选择一个冥想开始</div>
+      <div class="player-subtitle" id="med-player-sub">放松身心，回归当下</div>
+      <div class="player-progress" onclick="seekMeditation(event)">
+        <div class="player-progress-fill" id="med-progress" style="width:0%"></div>
+      </div>
+      <div class="player-time">
+        <span id="med-time-cur">0:00</span>
+        <span id="med-time-total">0:00</span>
+      </div>
+      <div class="player-btns">
+        <button class="player-btn" onclick="medSeek(-15)">⏪</button>
+        <button class="player-btn play" id="med-play-btn" onclick="toggleMeditation()">▶</button>
+        <button class="player-btn" onclick="medSeek(15)">⏩</button>
+      </div>
+    </div>
+    <div class="meditation-list">${listHtml}</div>
+  `;
+
+  startBreathAnimation();
+}
+
+let medPlaying = false;
+let medTimer = null;
+let medCurrent = 0;
+let medTotal = 0;
+
+function playMeditation(idx) {
+  const meds = [
+    {name:'晨间唤醒冥想',dur:480}, {name:'上善若水·水流冥想',dur:600},
+    {name:'致虚极·深度放松',dur:900}, {name:'道法自然·森林浴',dur:720},
+    {name:'呼吸观照·正念冥想',dur:300}, {name:'睡前安神·归静冥想',dur:1200}
+  ];
+  const m = meds[idx];
+  document.getElementById('med-player-title').textContent = m.name;
+  document.getElementById('med-player-sub').textContent = '正在播放...';
+  medTotal = m.dur;
+  medCurrent = 0;
+  medPlaying = true;
+  document.getElementById('med-play-btn').textContent = '⏸';
+  document.getElementById('med-time-total').textContent = formatTime(medTotal);
+  if (medTimer) clearInterval(medTimer);
+  medTimer = setInterval(updateMedProgress, 1000);
+}
+
+function toggleMeditation() {
+  if (medTotal === 0) return;
+  medPlaying = !medPlaying;
+  document.getElementById('med-play-btn').textContent = medPlaying ? '⏸' : '▶';
+  if (medPlaying) {
+    medTimer = setInterval(updateMedProgress, 1000);
+  } else {
+    clearInterval(medTimer);
+  }
+}
+
+function updateMedProgress() {
+  if (!medPlaying) return;
+  medCurrent++;
+  if (medCurrent >= medTotal) {
+    medCurrent = medTotal;
+    medPlaying = false;
+    clearInterval(medTimer);
+    document.getElementById('med-play-btn').textContent = '▶';
+    document.getElementById('med-player-sub').textContent = '播放完毕';
+  }
+  document.getElementById('med-progress').style.width = ((medCurrent / medTotal) * 100) + '%';
+  document.getElementById('med-time-cur').textContent = formatTime(medCurrent);
+}
+
+function medSeek(delta) {
+  medCurrent = Math.max(0, Math.min(medTotal, medCurrent + delta));
+  document.getElementById('med-progress').style.width = ((medCurrent / medTotal) * 100) + '%';
+  document.getElementById('med-time-cur').textContent = formatTime(medCurrent);
+}
+
+function seekMeditation(e) {
+  if (medTotal === 0) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  medCurrent = Math.floor(pct * medTotal);
+  document.getElementById('med-progress').style.width = (pct * 100) + '%';
+  document.getElementById('med-time-cur').textContent = formatTime(medCurrent);
+}
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function startBreathAnimation() {
+  const el = document.getElementById('breath-text');
+  if (!el) return;
+  const phases = ['吸气...', '保持...', '呼气...'];
+  let idx = 0;
+  setInterval(() => {
+    idx = (idx + 1) % phases.length;
+    if (el) el.textContent = phases[idx];
+  }, 2000);
+}
+</script>
+<script>
+// ==================== MEMBERSHIP ====================
+function renderProfileMembership() {
+  const container = document.getElementById('profile-membership');
+  container.innerHTML = `
+    <div class="membership-hero">
+      <h2>开启你的修炼之旅</h2>
+      <p>选择适合你的方案，获得系统性的成长指导</p>
+    </div>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div class="pricing-name">7天体验营</div>
+        <div class="pricing-price">¥99 <span>/人</span></div>
+        <ul class="pricing-features">
+          <li>7天基础课程</li>
+          <li>每日打卡追踪</li>
+          <li>社群交流</li>
+          <li>1次助教答疑</li>
+        </ul>
+        <button class="btn-pricing outline" onclick="showToast('体验营报名功能即将上线')">立即报名</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-name">21天标准训练营</div>
+        <div class="pricing-price">¥399 <span>/人</span></div>
+        <ul class="pricing-features">
+          <li>完整21天课程体系</li>
+          <li>每日打卡与能量追踪</li>
+          <li>50人小班社群</li>
+          <li>助教全程陪伴</li>
+          <li>冥想音频全解锁</li>
+          <li>专属成长报告</li>
+        </ul>
+        <button class="btn-pricing primary" onclick="showToast('训练营报名功能即将上线')">立即报名</button>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-name">年度会员</div>
+        <div class="pricing-price">¥1299 <span>/年</span></div>
+        <ul class="pricing-features">
+          <li>全部训练营无限参加</li>
+          <li>独家进阶课程</li>
+          <li>优先匹配助教</li>
+          <li>线下活动优先名额</li>
+          <li>专属1v1成长规划</li>
+        </ul>
+        <button class="btn-pricing outline" onclick="showToast('年度会员开通功能即将上线')">开通会员</button>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-name">1v1 咨询</div>
+        <div class="pricing-price">¥599 <span>/次</span></div>
+        <ul class="pricing-features">
+          <li>60分钟深度对话</li>
+          <li>资深导师一对一</li>
+          <li>定制化修炼方案</li>
+          <li>后续跟进指导</li>
+        </ul>
+        <button class="btn-pricing outline" onclick="showToast('咨询预约功能即将上线')">预约咨询</button>
+      </div>
+    </div>
+    <div style="padding:0 20px 20px;">
+      <div class="section-title">企业版服务</div>
+      <div style="background:#fff;border-radius:var(--radius);padding:20px;box-shadow:0 2px 12px var(--shadow);">
+        <p style="font-size:14px;line-height:1.8;color:#555;margin-bottom:16px;">
+          为企业团队提供定制化的心理健康与团队效能提升解决方案。帮助员工缓解职场焦虑，提升团队凝聚力与创造力。
+        </p>
+        <ul class="pricing-features">
+          <li>定制化企业课程内容</li>
+          <li>团队专属修炼营</li>
+          <li>员工心理健康数据报告</li>
+          <li>线下工作坊 & 团建活动</li>
+          <li>企业文化融合方案</li>
+        </ul>
+        <button class="btn-pricing primary" style="margin-top:16px;" onclick="showToast('企业版咨询请联系 enterprise@zhenzhicamp.com')">联系商务</button>
+      </div>
+    </div>
+    <div class="compare-table">
+      <table>
+        <tr><th>权益</th><th>体验营</th><th>标准营</th><th>年度会员</th></tr>
+        <tr><td>课程天数</td><td>7天</td><td>21天</td><td>无限</td></tr>
+        <tr><td>社群服务</td><td>✓</td><td>✓</td><td>✓ VIP群</td></tr>
+        <tr><td>助教答疑</td><td>1次</td><td>不限</td><td>不限</td></tr>
+        <tr><td>冥想音频</td><td>3个</td><td>全部</td><td>全部+独家</td></tr>
+        <tr><td>成长报告</td><td>✗</td><td>✓</td><td>✓ 季度</td></tr>
+        <tr><td>线下活动</td><td>✗</td><td>✗</td><td>✓ 优先</td></tr>
+        <tr><td>1v1咨询</td><td>✗</td><td>✗</td><td>1次/季</td></tr>
+      </table>
+    </div>
+  `;
+}
+
+// ==================== DIARY ====================
+function renderProfileDiary() {
+  const container = document.getElementById('profile-diary');
+  let listHtml = '';
+  if (state.diaries.length === 0) {
+    listHtml = '<div style="text-align:center;padding:40px 20px;color:var(--gray);">还没有日记，开始记录你的修炼感悟吧</div>';
+  } else {
+    state.diaries.slice().reverse().forEach((d, i) => {
+      listHtml += `<div class="diary-card" onclick="viewDiary(${state.diaries.length - 1 - i})">
+        <div class="diary-date">${d.date}</div>
+        <div class="diary-mood">心情：${d.mood} · 能量：${d.energy}/10</div>
+        <div class="diary-preview">${d.event || d.insight || '点击查看详情...'}</div>
+      </div>`;
+    });
+  }
+
+  container.innerHTML = `
+    <div class="diary-actions">
+      <button class="btn-new-diary" onclick="openNewDiary()">📝 写今日日记</button>
+    </div>
+    <div class="diary-list">${listHtml}</div>
+  `;
+}
+
+function openNewDiary() {
+  const modal = document.getElementById('diary-modal');
+  const moods = ['😊 愉悦','😌 平静','😐 一般','😔 低落','😤 烦躁','🤔 迷茫','💪 振奋','🙏 感恩'];
+  let moodHtml = '';
+  moods.forEach(m => {
+    moodHtml += `<div class="diary-mood-option" onclick="this.parentElement.querySelectorAll('.diary-mood-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')" data-mood="${m}">${m}</div>`;
+  });
+
+  document.getElementById('diary-form-content').innerHTML = `
+    <div class="diary-field">
+      <label>今日心情</label>
+      <div class="diary-mood-select">${moodHtml}</div>
+    </div>
+    <div class="diary-field">
+      <label>今日能量值 (1-10)</label>
+      <input type="range" class="energy-slider" id="diary-energy" min="1" max="10" value="5" style="width:100%" oninput="document.getElementById('diary-energy-val').textContent=this.value">
+      <div style="text-align:center;font-size:24px;color:var(--moss);font-weight:700;margin:8px 0" id="diary-energy-val">5</div>
+    </div>
+    <div class="diary-field">
+      <label>🔑 今日关键事件</label>
+      <textarea id="diary-event" placeholder="今天发生了什么重要的事？"></textarea>
+    </div>
+    <div class="diary-field">
+      <label>📜 道德经感悟</label>
+      <textarea id="diary-insight" placeholder="今天的课程给你带来了什么启发？"></textarea>
+    </div>
+    <div class="diary-field">
+      <label>🎯 明日计划</label>
+      <textarea id="diary-plan" placeholder="明天想尝试什么实践？"></textarea>
+    </div>
+    <button class="btn-save-diary" onclick="saveDiary()">保存日记</button>
+  `;
+
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => modal.classList.add('show'));
+}
+
+function saveDiary() {
+  const moodEl = document.querySelector('#diary-form-content .diary-mood-option.selected');
+  const mood = moodEl ? moodEl.dataset.mood : '😊 愉悦';
+  const energy = document.getElementById('diary-energy').value;
+  const event = document.getElementById('diary-event').value;
+  const insight = document.getElementById('diary-insight').value;
+  const plan = document.getElementById('diary-plan').value;
+
+  state.diaries.push({
+    date: new Date().toLocaleDateString('zh-CN'),
+    mood, energy, event, insight, plan
+  });
+  checkBadges();
+  saveState();
+  closeDiaryModal({target:document.getElementById('diary-modal'),currentTarget:document.getElementById('diary-modal')});
+  showToast('日记保存成功！');
+  renderProfileDiary();
+}
+
+function viewDiary(idx) {
+  const d = state.diaries[idx];
+  if (!d) return;
+  const modal = document.getElementById('diary-modal');
+  document.getElementById('diary-form-content').innerHTML = `
+    <div style="padding:4px 0;">
+      <div style="font-size:14px;color:var(--gold);margin-bottom:8px;">${d.date}</div>
+      <div style="margin-bottom:16px;">
+        <span style="font-size:13px;color:var(--gray);">心情：</span>${d.mood}
+        <span style="font-size:13px;color:var(--gray);margin-left:16px;">能量：</span>${d.energy}/10
+      </div>
+      ${d.event ? `<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">🔑 关键事件</div><div style="font-size:13px;line-height:1.7;color:#555;">${d.event}</div></div>` : ''}
+      ${d.insight ? `<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">📜 道德经感悟</div><div style="font-size:13px;line-height:1.7;color:#555;">${d.insight}</div></div>` : ''}
+      ${d.plan ? `<div style="margin-bottom:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;">🎯 明日计划</div><div style="font-size:13px;line-height:1.7;color:#555;">${d.plan}</div></div>` : ''}
+    </div>
+  `;
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => modal.classList.add('show'));
+}
+
+function closeDiaryModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  const modal = document.getElementById('diary-modal');
+  modal.classList.remove('show');
+  setTimeout(() => { modal.style.display = 'none'; }, 350);
+}
+
+// ==================== HOME UPDATES ====================
+function updateHomeDailyCard() {
+  const card = document.getElementById('home-daily-card');
+  const dayIdx = state.currentDay - 1;
+  const c = COURSES[dayIdx] || COURSES[0];
+  card.innerHTML = `
+    <div class="daily-tag">DAY ${c.day}</div>
+    <div class="daily-title">${c.title}</div>
+    <div class="daily-quote">${c.theme}。${c.quote || ''}</div>
+    <button class="daily-btn" onclick="openCourseDetail(${dayIdx})">进入今日课程 →</button>
+  `;
+}
+
+// ==================== INIT ====================
+function init() {
+  updateHomeDailyCard();
+
+  // Rotate daily quotes
+  const quotes = [
+    {t:'"上善若水，水善利万物而不争。"', s:'《道德经》第八章'},
+    {t:'"知人者智，自知者明。"', s:'《道德经》第三十三章'},
+    {t:'"千里之行，始于足下。"', s:'《道德经》第六十四章'},
+    {t:'"致虚极，守静笃。"', s:'《道德经》第十六章'},
+    {t:'"大音希声，大象无形。"', s:'《道德经》第四十一章'},
+    {t:'"曲则全，枉则直。"', s:'《道德经》第二十二章'},
+    {t:'"人之生也柔弱，其死也坚强。"', s:'《道德经》第七十六章'},
+  ];
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById('daily-quote-text').textContent = q.t;
+  document.querySelector('.quote-src').textContent = '— ' + q.s;
+
+  // Enter key for chat
+  document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendChat();
+  });
+
+  // Window resize for chart
+  window.addEventListener('resize', () => {
+    if (document.getElementById('page-checkin').classList.contains('active')) renderEnergyChart();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
